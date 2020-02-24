@@ -6,4 +6,7 @@
 
     <color name="colorBackgroundGray1">#ff2d9a59</color>
     <color name="colorBackgroundGray2">#ff42959a</color>
+
+    <color name="colorDiceCircle">#EC0050</color>
+    <color name="colorDice">#EBEBEB</color>
 </resources>
