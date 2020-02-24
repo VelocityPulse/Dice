@@ -3,22 +3,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     android:layout_gravity="center"
-    android:gravity="center">
+    android:background="@drawable/background">
+
 
     <ImageView
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
+        android:id="@+id/dice_background"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:src="@drawable/dice_shape"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/dice_background"
         tools:ignore="ContentDescription" />
 
     <ImageView
+        android:id="@+id/dice_shape"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/dice_1"
+        android:layout_centerInParent="true"
+        android:src="@drawable/dice_3"
         tools:ignore="ContentDescription" />
+
+    <View
+        android:id="@+id/screen_click"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:onClick="onScreenClick" />
 
 </RelativeLayout>

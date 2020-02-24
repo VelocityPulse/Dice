@@ -2,10 +2,16 @@ package com.cpulse.dicecustomrules
 
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.cpulse.dicecustomrules.core.LogManager
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private const val TAG = "MAIN ACTIVITY"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,5 +26,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun onScreenClick(view: View) {
 
+        LogManager.debug(TAG, "test")
+
+    }
 }
