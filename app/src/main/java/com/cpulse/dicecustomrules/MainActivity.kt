@@ -63,7 +63,6 @@ class MainActivity : AppCompatActivity() {
 
         mPlayerDiceSong1 = MediaPlayer.create(this, R.raw.dice_song_1)
         mPlayerDiceSong2 = MediaPlayer.create(this, R.raw.dice_song_2)
-
     }
 
     fun setDiceShape(iNumber: Int) {
