@@ -6,24 +6,27 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.cpulse.dicecustomrules.core.LogManager
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "MAIN ACTIVITY"
+        private const val RARITY_FACTOR = 2
         private const val RANDOMIZING_UPDATE_TIME = 10
         private const val THREAD_RANDOMIZING_TIME = 500
     }
 
-    private val mValuesMap: List<Int> = ArrayList()
-    private val mRandom: Random = Random()
+    private val mValuesMap = IntArray(6)
+    private val mDiceShapeMap = Array<ImageView?>(6) { null }
+    private val mRandom = Random()
 
-    private var mDiceShape: ImageView? = null
     private var mDiceBackground: ImageView? = null
+
+    private var mThread: Thread? = null
 
     private var mTimerDiceUpdate: Long = 0
     private var mTimerThread: Long = 0
@@ -46,34 +49,26 @@ class MainActivity : AppCompatActivity() {
 
     fun init() {
         LogManager.info(TAG, "Init")
-
-        mDiceShape = findViewById(R.id.dice_shape)
         mDiceBackground = findViewById(R.id.dice_background)
+        mDiceShapeMap[0] = findViewById(R.id.dice_shape_1)
+        mDiceShapeMap[1] = findViewById(R.id.dice_shape_3)
+        mDiceShapeMap[2] = findViewById(R.id.dice_shape_2)
+        mDiceShapeMap[3] = findViewById(R.id.dice_shape_4)
+        mDiceShapeMap[4] = findViewById(R.id.dice_shape_5)
+        mDiceShapeMap[5] = findViewById(R.id.dice_shape_6)
     }
 
     fun setDiceShape(iNumber: Int) {
-        LogManager.info(TAG, "Set dice shape")
-        val lNumber = iNumber % 7
 
-        if (mDiceShape == null) {
-            LogManager.error(TAG, "mDiceShape not initialized")
-            return
+        for (lItem in mDiceShapeMap) {
+            if (lItem!!.isVisible)
+                lItem.visibility = View.INVISIBLE
         }
 
-        LogManager.info(TAG, "Set image resources : $lNumber")
-        when (lNumber) {
-            0 -> mDiceShape!!.setImageResource(R.drawable.dice_1)
-            1 -> mDiceShape!!.setImageResource(R.drawable.dice_2)
-            2 -> mDiceShape!!.setImageResource(R.drawable.dice_3)
-            3 -> mDiceShape!!.setImageResource(R.drawable.dice_4)
-            4 -> mDiceShape!!.setImageResource(R.drawable.dice_5)
-            5 -> mDiceShape!!.setImageResource(R.drawable.dice_6)
-        }
+        mDiceShapeMap[iNumber]!!.visibility = View.VISIBLE
     }
 
     fun randomizeDice() {
-        LogManager.debug(TAG, "RandomizeDice")
-
         if (mRandomizingDice) {
             LogManager.error(TAG, "Already randomizing dice")
             return
@@ -89,26 +84,55 @@ class MainActivity : AppCompatActivity() {
 
                 if (lElapsedTime > RANDOMIZING_UPDATE_TIME) {
 
-                    this.runOnUiThread {
-                        setDiceShape(mRandom!!.nextInt(6))
+                    runOnUiThread {
+                        setDiceShape(mRandom.nextInt(6))
                     }
 
                     mTimerDiceUpdate = lCurrentTimeMillis
                     mTimerThread += lElapsedTime
                 }
 
-                if (mTimerThread > THREAD_RANDOMIZING_TIME)
+                if (mTimerThread > THREAD_RANDOMIZING_TIME) {
+                    runOnUiThread {
+                        setDiceShape(getExcludedNumberOrRandom())
+                    }
                     break
+                }
 
                 Thread.sleep(1) // Slow down the while(true)
             }
             mRandomizingDice = false
         }).start()
+
+    }
+
+    private fun getExcludedNumberOrRandom(): Int {
+        var lIndex = -1
+
+        while (++lIndex < 6) {
+            val lNumberOfShowedIndex = mValuesMap[lIndex]
+
+            for (lTotalList in mValuesMap) {
+                if (lTotalList - lNumberOfShowedIndex > RARITY_FACTOR) {
+                    LogManager.error(
+                        TAG,
+                        "Index '" + (lIndex + 1) + "' hasn't been printed since a long time..."
+                    )
+                    LogManager.info(TAG, "NEW DICE : " + (lIndex + 1))
+                    mValuesMap[lIndex] += 1
+                    return lIndex
+                }
+            }
+        }
+        val oValue = mRandom.nextInt(6)
+        mValuesMap[oValue] += 1
+        LogManager.info(TAG, "NEW DICE : " + (oValue + 1))
+        return oValue
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onScreenClick(iView: View) {
-        LogManager.debug(TAG, "On screen click")
+//        LogManager.debug(TAG, "On screen click")
         randomizeDice()
     }
 
