@@ -1,5 +1,6 @@
 package com.vpulse.dicecustomrules
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -153,9 +154,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onSettingsClick(view: View) {
-
-        LogManager.debug(TAG, "lol")
-
+        val intent = Intent(this, SettingsActivity::class.java)
+        startActivity(intent)
     }
 
 }
