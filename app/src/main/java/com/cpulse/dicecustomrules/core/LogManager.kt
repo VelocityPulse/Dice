@@ -9,7 +9,6 @@ object LogManager {
     private const val TAG_PREFIX = "DICE LOG : "
     private var sSilentDebugLog = false
 
-
     fun setSilentDebugLog(iValue: Boolean) {
         sSilentDebugLog = iValue
     }
