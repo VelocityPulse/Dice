@@ -1,5 +1,6 @@
 package com.cpulse.dicecustomrules
 
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -23,6 +24,9 @@ class MainActivity : AppCompatActivity() {
     private val mValuesMap = IntArray(6)
     private val mDiceShapeMap = Array<ImageView?>(6) { null }
     private val mRandom = Random()
+
+    private var mPlayerDiceSong1: MediaPlayer? = null
+    private var mPlayerDiceSong2: MediaPlayer? = null
 
     private var mDiceBackground: ImageView? = null
 
@@ -56,6 +60,10 @@ class MainActivity : AppCompatActivity() {
         mDiceShapeMap[3] = findViewById(R.id.dice_shape_4)
         mDiceShapeMap[4] = findViewById(R.id.dice_shape_5)
         mDiceShapeMap[5] = findViewById(R.id.dice_shape_6)
+
+        mPlayerDiceSong1 = MediaPlayer.create(this, R.raw.dice_song_1)
+        mPlayerDiceSong2 = MediaPlayer.create(this, R.raw.dice_song_2)
+
     }
 
     fun setDiceShape(iNumber: Int) {
@@ -76,6 +84,14 @@ class MainActivity : AppCompatActivity() {
         mRandomizingDice = true
 
         Thread(Runnable {
+
+            mPlayerDiceSong1?.seekTo(0)
+            mPlayerDiceSong2?.seekTo(0)
+            if (mRandom.nextInt(2) == 0)
+                mPlayerDiceSong1?.start()
+            else
+                mPlayerDiceSong2?.start()
+
             mTimerDiceUpdate = System.currentTimeMillis()
             mTimerThread = 0
             while (true) {
@@ -132,6 +148,7 @@ class MainActivity : AppCompatActivity() {
 
     @Suppress("UNUSED_PARAMETER")
     fun onScreenClick(iView: View) {
+
 //        LogManager.debug(TAG, "On screen click")
         randomizeDice()
     }
