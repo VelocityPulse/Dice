@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
-    package="com.cpulse.dicecustomrules">
+    package="com.vpulse.dicecustomrules">
 
     <dist:module dist:instant="true" />
 
@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme.FullScreen">
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.vpulse.dicecustomrules.MainActivity"
             android:screenOrientation="portrait">
 
             <intent-filter>

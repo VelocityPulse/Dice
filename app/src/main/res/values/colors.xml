@@ -4,9 +4,13 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
+    <color name="colorDarkSetting">#424242</color>
+
     <color name="colorBackground1">#DE4DAA</color>
     <color name="colorBackground2">#F6D327</color>
 
     <color name="colorDiceCircle">#EC0050</color>
     <color name="colorDice">#EBEBEB</color>
+
+
 </resources>

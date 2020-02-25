@@ -1,78 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
     android:background="@drawable/background">
 
-    <ImageView
-        android:id="@+id/dice_background"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:src="@drawable/dice_background"
-        tools:ignore="ContentDescription" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/dice_background"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/dice_background"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/dice_shape_1"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/dice_1"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/dice_shape_2"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/dice_2"
+            android:visibility="invisible"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/dice_shape_3"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/dice_3"
+            android:visibility="invisible"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/dice_shape_4"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/dice_4"
+            android:visibility="invisible"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/dice_shape_5"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/dice_5"
+            android:visibility="invisible"
+            tools:ignore="ContentDescription" />
+
+        <ImageButton
+            android:id="@+id/dice_shape_6"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/dice_6"
+            android:visibility="invisible"
+            tools:ignore="ContentDescription" />
+
+        <View
+            android:id="@+id/screen_click"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:onClick="onScreenClick" />
+
+    </RelativeLayout>
 
     <ImageView
-        android:id="@+id/dice_shape_1"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/dice_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/ripple_effect_rectangle"
+        android:onClick="onSettingsClick"
+        android:padding="5dp"
+        android:src="@drawable/ic_settings"
         tools:ignore="ContentDescription" />
 
-    <ImageView
-        android:id="@+id/dice_shape_2"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/dice_2"
-        android:visibility="invisible"
-        tools:ignore="ContentDescription" />
-
-    <ImageView
-        android:id="@+id/dice_shape_3"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/dice_3"
-        android:visibility="invisible"
-        tools:ignore="ContentDescription" />
-
-    <ImageView
-        android:id="@+id/dice_shape_4"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/dice_4"
-        android:visibility="invisible"
-        tools:ignore="ContentDescription" />
-
-    <ImageView
-        android:id="@+id/dice_shape_5"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/dice_5"
-        android:visibility="invisible"
-        tools:ignore="ContentDescription" />
-
-    <ImageView
-        android:id="@+id/dice_shape_6"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/dice_6"
-        android:visibility="invisible"
-        tools:ignore="ContentDescription" />
-
-    <View
-        android:id="@+id/screen_click"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:onClick="onScreenClick" />
-
-</RelativeLayout>
+</FrameLayout>

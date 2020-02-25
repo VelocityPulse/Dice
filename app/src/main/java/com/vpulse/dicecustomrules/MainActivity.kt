@@ -1,4 +1,4 @@
-package com.cpulse.dicecustomrules
+package com.vpulse.dicecustomrules
 
 import android.media.MediaPlayer
 import android.os.Build
@@ -8,7 +8,7 @@ import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.cpulse.dicecustomrules.core.LogManager
+import com.vpulse.dicecustomrules.core.LogManager
 import java.util.*
 
 
@@ -150,6 +150,12 @@ class MainActivity : AppCompatActivity() {
 
 //        LogManager.debug(TAG, "On screen click")
         randomizeDice()
+    }
+
+    fun onSettingsClick(view: View) {
+
+        LogManager.debug(TAG, "lol")
+
     }
 
 }
