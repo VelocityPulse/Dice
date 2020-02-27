@@ -3,6 +3,7 @@ package com.vpulse.dicecustomrules
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 
 class SettingsActivity : AppCompatActivity() {
@@ -12,6 +13,9 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.settings_activity)
 
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+
+        supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        supportActionBar!!.setCustomView(R.layout.action_bar_settings)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val lAttributes = window.attributes
