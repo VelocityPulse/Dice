@@ -42,7 +42,9 @@ class MainActivity : AppCompatActivity() {
     private var mTimerDiceUpdate: Long = 0
     private var mTimerThread: Long = 0
     private var mRandomizingDice = false
+
     private var mUpdateAlphaNumericText = false
+    private var mSongEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +65,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-
         if (PreferencesManager.getAlphaNumericShowing(this)) {
             mAlphaNumericText?.visibility = View.VISIBLE
             mUpdateAlphaNumericText = true
@@ -71,6 +72,8 @@ class MainActivity : AppCompatActivity() {
             mAlphaNumericText?.visibility = View.GONE
             mUpdateAlphaNumericText = false
         }
+
+        mSongEnabled = PreferencesManager.getSongEnabled(this)
 
         super.onResume()
     }
@@ -126,12 +129,7 @@ class MainActivity : AppCompatActivity() {
 
         Thread(Runnable {
 
-            mPlayerDiceSong1?.seekTo(0)
-            mPlayerDiceSong2?.seekTo(0)
-            if (mRandom.nextInt(2) == 0)
-                mPlayerDiceSong1?.start()
-            else
-                mPlayerDiceSong2?.start()
+            playSong()
 
             mTimerDiceUpdate = System.currentTimeMillis()
             mTimerThread = 0
@@ -191,6 +189,17 @@ class MainActivity : AppCompatActivity() {
         LogManager.info(TAG, "NEW DICE : $iValue")
         if (mUpdateAlphaNumericText) {
             mAlphaNumericText?.text = iValue.toString()
+        }
+    }
+
+    private fun playSong() {
+        if (mSongEnabled) {
+            mPlayerDiceSong1?.seekTo(0)
+            mPlayerDiceSong2?.seekTo(0)
+            if (mRandom.nextInt(2) == 0)
+                mPlayerDiceSong1?.start()
+            else
+                mPlayerDiceSong2?.start()
         }
     }
 

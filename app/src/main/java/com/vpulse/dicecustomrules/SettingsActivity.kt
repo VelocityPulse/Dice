@@ -36,9 +36,12 @@ class SettingsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val lAlphaNumericSwitch = findViewById<Switch>(R.id.alpha_numeric_switch)
+        val lSongSwitch = findViewById<Switch>(R.id.song_switch)
 
         if (PreferencesManager.getAlphaNumericShowing(this))
             lAlphaNumericSwitch.isChecked = true
+        if (PreferencesManager.getSongEnabled(this))
+            lSongSwitch.isChecked = true
     }
 
 
@@ -54,6 +57,12 @@ class SettingsActivity : AppCompatActivity() {
         iView as Switch
 
         PreferencesManager.setAlphaNumericShowing(this, iView.isChecked)
+    }
+
+    fun onSongClick(iView: View) {
+        iView as Switch
+
+        PreferencesManager.setSongEnabled(this, iView.isChecked)
     }
 
 

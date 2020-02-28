@@ -15,6 +15,17 @@
         android:paddingTop="40dp">
 
         <Switch
+            android:id="@+id/song_switch"
+            android:onClick="onSongClick"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/switch_vertical_padding"
+            android:paddingBottom="@dimen/switch_vertical_padding"
+            android:text="Song"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/switch_text_size" />
+
+        <Switch
             android:id="@+id/alpha_numeric_switch"
             android:onClick="onAlphaNumericClick"
             android:layout_width="match_parent"
