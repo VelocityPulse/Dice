@@ -5,12 +5,10 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import android.widget.LinearLayout
 import android.widget.NumberPicker
 import android.widget.Switch
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import com.vpulse.dicecustomrules.core.LogManager
 import com.vpulse.dicecustomrules.core.PreferencesManager
 
 class SettingsActivity : AppCompatActivity() {
@@ -41,16 +39,12 @@ class SettingsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         mDiceNumberPicker = findViewById(R.id.dice_number_picker)
-        mDiceNumberPicker!!.setOnValueChangedListener(
-            NumberPicker.OnValueChangeListener { picker, oldVal, newVal ->
-
-                LogManager.debug(TAG, "Pick :" + newVal)
-
-            })
+        mDiceNumberPicker!!.setOnValueChangedListener { _, _, newVal ->
+            PreferencesManager.setDiceNumber(this, newVal)
+        }
         mDiceNumberPicker!!.minValue = 1
         mDiceNumberPicker!!.maxValue = 10
-        mDiceNumberPicker!!.isEnabled = false
-//        mDiceNumberPicker.orientation = LinearLayout.HORIZONTAL
+//        mDiceNumberPicker!!.isEnabled = false
 
         val lAlphaNumericSwitch = findViewById<Switch>(R.id.alpha_numeric_switch)
         val lSongSwitch = findViewById<Switch>(R.id.song_switch)
