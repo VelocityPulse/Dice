@@ -43,8 +43,8 @@ class SettingsActivity : AppCompatActivity() {
             PreferencesManager.setDiceNumber(this, newVal)
         }
         mDiceNumberPicker!!.minValue = 1
-        mDiceNumberPicker!!.maxValue = 10
-//        mDiceNumberPicker!!.isEnabled = false
+        mDiceNumberPicker!!.maxValue = 12
+        mDiceNumberPicker!!.value = PreferencesManager.getDiceNumber(this)
 
         val lAlphaNumericSwitch = findViewById<Switch>(R.id.alpha_numeric_switch)
         val lSongSwitch = findViewById<Switch>(R.id.song_switch)

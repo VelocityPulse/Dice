@@ -12,10 +12,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import com.vpulse.dicecustomrules.core.LogManager
 import com.vpulse.dicecustomrules.core.PreferencesManager
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -27,18 +27,19 @@ class MainActivity : AppCompatActivity() {
         private const val THREAD_RANDOMIZING_TIME = 500
     }
 
-    private val mValuesMap = IntArray(6)
-    private val mDiceShapeMap = Array<ImageView?>(6) { null }
-    private val mRandom = Random()
+    private val mOneDiceValueMap: IntArray = IntArray(6)
+    private val mRandom: Random = Random()
+
+    private val mDiceList: MutableList<Dice> = ArrayList()
 
     private var mPlayerDiceSong1: MediaPlayer? = null
     private var mPlayerDiceSong2: MediaPlayer? = null
 
     private var mDiceBackground: ImageView? = null
     private var mAlphaNumericText: TextView? = null
-
     private var mThread: Thread? = null
 
+    private var mDiceNumber: Int = 1
     private var mTimerDiceUpdate: Long = 0
     private var mTimerThread: Long = 0
     private var mRandomizingDice = false
@@ -75,6 +76,9 @@ class MainActivity : AppCompatActivity() {
 
         mSongEnabled = PreferencesManager.getSongEnabled(this)
 
+        mDiceNumber = PreferencesManager.getDiceNumber(this)
+        updateDicesDisplayed()
+        notifyNewDiceSum()
         super.onResume()
     }
 
@@ -96,13 +100,19 @@ class MainActivity : AppCompatActivity() {
 
     fun init() {
         LogManager.info(TAG, "Init")
-        mDiceBackground = findViewById(R.id.dice_background)
-        mDiceShapeMap[0] = findViewById(R.id.dice_shape_1)
-        mDiceShapeMap[1] = findViewById(R.id.dice_shape_2)
-        mDiceShapeMap[2] = findViewById(R.id.dice_shape_3)
-        mDiceShapeMap[3] = findViewById(R.id.dice_shape_4)
-        mDiceShapeMap[4] = findViewById(R.id.dice_shape_5)
-        mDiceShapeMap[5] = findViewById(R.id.dice_shape_6)
+
+        mDiceList.add(Dice(findViewById(R.id.dice_1)))
+        mDiceList.add(Dice(findViewById(R.id.dice_2)))
+        mDiceList.add(Dice(findViewById(R.id.dice_3)))
+        mDiceList.add(Dice(findViewById(R.id.dice_4)))
+        mDiceList.add(Dice(findViewById(R.id.dice_5)))
+        mDiceList.add(Dice(findViewById(R.id.dice_6)))
+        mDiceList.add(Dice(findViewById(R.id.dice_7)))
+        mDiceList.add(Dice(findViewById(R.id.dice_8)))
+        mDiceList.add(Dice(findViewById(R.id.dice_9)))
+        mDiceList.add(Dice(findViewById(R.id.dice_10)))
+        mDiceList.add(Dice(findViewById(R.id.dice_11)))
+        mDiceList.add(Dice(findViewById(R.id.dice_12)))
 
         mPlayerDiceSong1 = MediaPlayer.create(this, R.raw.dice_song_1)
         mPlayerDiceSong2 = MediaPlayer.create(this, R.raw.dice_song_2)
@@ -110,14 +120,16 @@ class MainActivity : AppCompatActivity() {
         mAlphaNumericText = findViewById(R.id.alpha_numeric_text_view)
     }
 
-    fun setDiceShape(iNumber: Int) {
+    fun updateDicesDisplayed() {
+        var lIndex: Int = -1
 
-        for (lItem in mDiceShapeMap) {
-            if (lItem!!.isVisible)
-                lItem.visibility = View.INVISIBLE
+        while (++lIndex < mDiceNumber) {
+            mDiceList[lIndex].setVisibility(View.VISIBLE)
         }
-
-        mDiceShapeMap[iNumber]!!.visibility = View.VISIBLE
+        lIndex--
+        while (++lIndex < 12) {
+            mDiceList[lIndex].setVisibility(View.GONE)
+        }
     }
 
     fun randomizeDice() {
@@ -140,7 +152,9 @@ class MainActivity : AppCompatActivity() {
                 if (lElapsedTime > RANDOMIZING_UPDATE_TIME) {
 
                     runOnUiThread {
-                        setDiceShape(mRandom.nextInt(6))
+                        for (lItem in mDiceList) {
+                            lItem.setDiceShape(mRandom.nextInt(6))
+                        }
                     }
 
                     mTimerDiceUpdate = lCurrentTimeMillis
@@ -149,12 +163,19 @@ class MainActivity : AppCompatActivity() {
 
                 if (mTimerThread > THREAD_RANDOMIZING_TIME) {
                     runOnUiThread {
-                        setDiceShape(getExcludedNumberOrRandom())
+                        if (mDiceNumber == 1)
+                            mDiceList[0].setDiceShape(getExcludedNumberOrRandom())
+                        else {
+                            for (lItem in mDiceList) {
+                                lItem.setDiceShape(mRandom.nextInt(6))
+                            }
+                        }
+                        notifyNewDiceSum()
                     }
                     break
                 }
 
-                Thread.sleep(1) // Slow down the while(true)
+                Thread.sleep(10) // Slow down the while(true)
             }
             mRandomizingDice = false
         }).start()
@@ -165,30 +186,35 @@ class MainActivity : AppCompatActivity() {
         var lIndex = -1
 
         while (++lIndex < 6) {
-            val lNumberOfShowedIndex = mValuesMap[lIndex]
+            val lNumberOfShowedIndex = mOneDiceValueMap[lIndex]
 
-            for (lTotalList in mValuesMap) {
+            for (lTotalList in mOneDiceValueMap) {
                 if (lTotalList - lNumberOfShowedIndex > RARITY_FACTOR) {
                     LogManager.error(
                         TAG,
                         "Index '" + (lIndex + 1) + "' hasn't been printed since a long time..."
                     )
-                    notifyNewDice(lIndex + 1)
-                    mValuesMap[lIndex] += 1
+                    mOneDiceValueMap[lIndex] += 1
                     return lIndex
                 }
             }
         }
         val oValue = mRandom.nextInt(6)
-        mValuesMap[oValue] += 1
-        notifyNewDice(oValue + 1)
+        mOneDiceValueMap[oValue] += 1
         return oValue
     }
 
-    private fun notifyNewDice(iValue: Int) {
-        LogManager.info(TAG, "NEW DICE : $iValue")
+    private fun notifyNewDiceSum() {
+
+        var lSumValue = 0
+
+        for (lItem in mDiceList) {
+            lSumValue += lItem.getDiceValue()
+        }
+
+        LogManager.info(TAG, "NEW DICE : $lSumValue")
         if (mUpdateAlphaNumericText) {
-            mAlphaNumericText?.text = iValue.toString()
+            mAlphaNumericText?.text = lSumValue.toString()
         }
     }
 
