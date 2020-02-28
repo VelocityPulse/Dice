@@ -4,6 +4,8 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
@@ -44,6 +46,9 @@ class MainActivity : AppCompatActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
 
+        supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        supportActionBar!!.setCustomView(R.layout.action_bar_no_title)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val lAttributes = window.attributes
             lAttributes.layoutInDisplayCutoutMode =
@@ -52,6 +57,22 @@ class MainActivity : AppCompatActivity() {
 
 
         init()
+    }
+
+    override fun onCreateOptionsMenu(iMenu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, iMenu)
+        return super.onCreateOptionsMenu(iMenu)
+    }
+
+    override fun onOptionsItemSelected(iItem: MenuItem): Boolean {
+        when (iItem.itemId) {
+            R.id.action_settings -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
+        return super.onOptionsItemSelected(iItem)
     }
 
     fun init() {
@@ -154,11 +175,5 @@ class MainActivity : AppCompatActivity() {
 //        LogManager.debug(TAG, "On screen click")
         randomizeDice()
     }
-
-    fun onSettingsClick(view: View) {
-        val intent = Intent(this, SettingsActivity::class.java)
-        startActivity(intent)
-    }
-
 }
 

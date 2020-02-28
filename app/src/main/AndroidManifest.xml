@@ -15,7 +15,7 @@
         <activity
             android:name="com.vpulse.dicecustomrules.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.TransparentActionBar.NoTitle">
+            android:theme="@style/AppTheme.TransparentActionBar">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
