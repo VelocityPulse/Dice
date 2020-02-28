@@ -9,10 +9,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.vpulse.dicecustomrules.core.LogManager
+import com.vpulse.dicecustomrules.core.PreferencesManager
 import java.util.*
 
 
@@ -33,12 +35,14 @@ class MainActivity : AppCompatActivity() {
     private var mPlayerDiceSong2: MediaPlayer? = null
 
     private var mDiceBackground: ImageView? = null
+    private var mAlphaNumericText: TextView? = null
 
     private var mThread: Thread? = null
 
     private var mTimerDiceUpdate: Long = 0
     private var mTimerThread: Long = 0
     private var mRandomizingDice = false
+    private var mUpdateAlphaNumericText = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +59,20 @@ class MainActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
 
-
         init()
+    }
+
+    override fun onResume() {
+
+        if (PreferencesManager.getAlphaNumericShowing(this)) {
+            mAlphaNumericText?.visibility = View.VISIBLE
+            mUpdateAlphaNumericText = true
+        } else {
+            mAlphaNumericText?.visibility = View.GONE
+            mUpdateAlphaNumericText = false
+        }
+
+        super.onResume()
     }
 
     override fun onCreateOptionsMenu(iMenu: Menu?): Boolean {
@@ -79,14 +95,16 @@ class MainActivity : AppCompatActivity() {
         LogManager.info(TAG, "Init")
         mDiceBackground = findViewById(R.id.dice_background)
         mDiceShapeMap[0] = findViewById(R.id.dice_shape_1)
-        mDiceShapeMap[1] = findViewById(R.id.dice_shape_3)
-        mDiceShapeMap[2] = findViewById(R.id.dice_shape_2)
+        mDiceShapeMap[1] = findViewById(R.id.dice_shape_2)
+        mDiceShapeMap[2] = findViewById(R.id.dice_shape_3)
         mDiceShapeMap[3] = findViewById(R.id.dice_shape_4)
         mDiceShapeMap[4] = findViewById(R.id.dice_shape_5)
         mDiceShapeMap[5] = findViewById(R.id.dice_shape_6)
 
         mPlayerDiceSong1 = MediaPlayer.create(this, R.raw.dice_song_1)
         mPlayerDiceSong2 = MediaPlayer.create(this, R.raw.dice_song_2)
+
+        mAlphaNumericText = findViewById(R.id.alpha_numeric_text_view)
     }
 
     fun setDiceShape(iNumber: Int) {
@@ -157,7 +175,7 @@ class MainActivity : AppCompatActivity() {
                         TAG,
                         "Index '" + (lIndex + 1) + "' hasn't been printed since a long time..."
                     )
-                    LogManager.info(TAG, "NEW DICE : " + (lIndex + 1))
+                    notifyNewDice(lIndex + 1)
                     mValuesMap[lIndex] += 1
                     return lIndex
                 }
@@ -165,14 +183,19 @@ class MainActivity : AppCompatActivity() {
         }
         val oValue = mRandom.nextInt(6)
         mValuesMap[oValue] += 1
-        LogManager.info(TAG, "NEW DICE : " + (oValue + 1))
+        notifyNewDice(oValue + 1)
         return oValue
+    }
+
+    private fun notifyNewDice(iValue: Int) {
+        LogManager.info(TAG, "NEW DICE : $iValue")
+        if (mUpdateAlphaNumericText) {
+            mAlphaNumericText?.text = iValue.toString()
+        }
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onScreenClick(iView: View) {
-
-//        LogManager.debug(TAG, "On screen click")
         randomizeDice()
     }
 }

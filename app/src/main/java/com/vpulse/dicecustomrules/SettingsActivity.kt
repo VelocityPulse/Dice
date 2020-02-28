@@ -3,11 +3,18 @@ package com.vpulse.dicecustomrules
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.view.WindowManager
+import android.widget.Switch
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import com.vpulse.dicecustomrules.core.PreferencesManager
 
 class SettingsActivity : AppCompatActivity() {
+
+    companion object {
+        private const val TAG = "SETTINGS ACTIVITY"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +31,16 @@ class SettingsActivity : AppCompatActivity() {
             lAttributes.layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
-
     }
+
+    override fun onResume() {
+        super.onResume()
+        val lAlphaNumericSwitch = findViewById<Switch>(R.id.alpha_numeric_switch)
+
+        if (PreferencesManager.getAlphaNumericShowing(this))
+            lAlphaNumericSwitch.isChecked = true
+    }
+
 
     override fun onOptionsItemSelected(iItem: MenuItem): Boolean {
         when (iItem.itemId) {
@@ -33,6 +48,12 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(iItem)
+    }
+
+    fun onAlphaNumericClick(iView: View) {
+        iView as Switch
+
+        PreferencesManager.setAlphaNumericShowing(this, iView.isChecked)
     }
 
 
