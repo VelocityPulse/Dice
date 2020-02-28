@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.widget.LinearLayout
+import android.widget.NumberPicker
 import android.widget.Switch
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import com.vpulse.dicecustomrules.core.LogManager
 import com.vpulse.dicecustomrules.core.PreferencesManager
 
 class SettingsActivity : AppCompatActivity() {
@@ -15,6 +18,8 @@ class SettingsActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "SETTINGS ACTIVITY"
     }
+
+    var mDiceNumberPicker: NumberPicker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +40,18 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        mDiceNumberPicker = findViewById(R.id.dice_number_picker)
+        mDiceNumberPicker!!.setOnValueChangedListener(
+            NumberPicker.OnValueChangeListener { picker, oldVal, newVal ->
+
+                LogManager.debug(TAG, "Pick :" + newVal)
+
+            })
+        mDiceNumberPicker!!.minValue = 1
+        mDiceNumberPicker!!.maxValue = 10
+        mDiceNumberPicker!!.isEnabled = false
+//        mDiceNumberPicker.orientation = LinearLayout.HORIZONTAL
+
         val lAlphaNumericSwitch = findViewById<Switch>(R.id.alpha_numeric_switch)
         val lSongSwitch = findViewById<Switch>(R.id.song_switch)
 
@@ -43,7 +60,6 @@ class SettingsActivity : AppCompatActivity() {
         if (PreferencesManager.getSongEnabled(this))
             lSongSwitch.isChecked = true
     }
-
 
     override fun onOptionsItemSelected(iItem: MenuItem): Boolean {
         when (iItem.itemId) {
@@ -64,6 +80,4 @@ class SettingsActivity : AppCompatActivity() {
 
         PreferencesManager.setSongEnabled(this, iView.isChecked)
     }
-
-
 }

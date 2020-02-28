@@ -16,48 +16,56 @@
 
         <Switch
             android:id="@+id/song_switch"
-            android:onClick="onSongClick"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="onSongClick"
             android:paddingTop="@dimen/switch_vertical_padding"
             android:paddingBottom="@dimen/switch_vertical_padding"
-            android:text="Song"
+            android:text="Sound"
             android:textColor="@android:color/white"
             android:textSize="@dimen/switch_text_size" />
 
         <Switch
             android:id="@+id/alpha_numeric_switch"
-            android:onClick="onAlphaNumericClick"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="onAlphaNumericClick"
             android:paddingTop="@dimen/switch_vertical_padding"
             android:paddingBottom="@dimen/switch_vertical_padding"
             android:text="Show alpha numeric sum"
             android:textColor="@android:color/white"
             android:textSize="@dimen/switch_text_size" />
 
-<!--        <Switch-->
-<!--            android:id="@+id/switch2"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:paddingTop="@dimen/switch_vertical_padding"-->
-<!--            android:paddingBottom="@dimen/switch_vertical_padding"-->
-<!--            android:text="Switch"-->
-<!--            android:textColor="@android:color/white"-->
-<!--            android:textSize="@dimen/switch_text_size" />-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
 
-<!--        <Switch-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:paddingTop="@dimen/switch_vertical_padding"-->
-<!--            android:paddingBottom="@dimen/switch_vertical_padding"-->
-<!--            android:text="Switch"-->
-<!--            android:textColor="@android:color/white"-->
-<!--            android:textSize="@dimen/switch_text_size" />-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:alpha="0.5"
+                android:text="Number of dices"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/switch_text_size" />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="end">
 
+                <NumberPicker
+                    android:id="@+id/dice_number_picker"
+                    android:layout_width="80dp"
+                    android:layout_height="130dp"
+                    android:theme="@android:style/Theme.Material" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
-
 
 </LinearLayout>
