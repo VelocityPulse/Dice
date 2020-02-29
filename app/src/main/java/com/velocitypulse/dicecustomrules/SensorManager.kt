@@ -1,4 +1,4 @@
-package com.vpulse.dicecustomrules
+package com.velocitypulse.dicecustomrules
 
 import android.content.Context
 

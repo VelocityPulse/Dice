@@ -1,4 +1,4 @@
-package com.vpulse.dicecustomrules.core
+package com.velocitypulse.dicecustomrules.core
 
 import android.util.Log
 

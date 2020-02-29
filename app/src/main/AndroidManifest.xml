@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.vpulse.dicecustomrules">
+    package="com.velocitypulse.dicecustomrules">
 
     <dist:module dist:instant="true" />
 
@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="com.vpulse.dicecustomrules.MainActivity"
+            android:name="com.velocitypulse.dicecustomrules.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.TransparentActionBar"
             tools:ignore="LockedOrientationActivity">
@@ -39,7 +39,7 @@
         </activity>
 
         <activity
-            android:name="com.vpulse.dicecustomrules.SettingsActivity"
+            android:name="com.velocitypulse.dicecustomrules.SettingsActivity"
             android:label="settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.TransparentActionBar"

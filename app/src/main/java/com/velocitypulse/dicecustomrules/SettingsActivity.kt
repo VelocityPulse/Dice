@@ -1,4 +1,4 @@
-package com.vpulse.dicecustomrules
+package com.velocitypulse.dicecustomrules
 
 import android.os.Build
 import android.os.Bundle
@@ -9,7 +9,7 @@ import android.widget.NumberPicker
 import android.widget.Switch
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import com.vpulse.dicecustomrules.core.PreferencesManager
+import com.velocitypulse.dicecustomrules.core.PreferencesManager
 
 class SettingsActivity : AppCompatActivity() {
 

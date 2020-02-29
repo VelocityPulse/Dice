@@ -1,4 +1,4 @@
-package com.vpulse.dicecustomrules
+package com.velocitypulse.dicecustomrules
 
 import android.content.Intent
 import android.media.MediaPlayer
@@ -12,8 +12,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import com.vpulse.dicecustomrules.core.LogManager
-import com.vpulse.dicecustomrules.core.PreferencesManager
+import com.velocitypulse.dicecustomrules.core.LogManager
+import com.velocitypulse.dicecustomrules.core.PreferencesManager
 import java.util.*
 import kotlin.collections.ArrayList
 
