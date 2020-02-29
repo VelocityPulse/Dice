@@ -3,7 +3,6 @@ package com.vpulse.dicecustomrules
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.core.view.isVisible
 
 class Dice constructor(iFrameView: FrameLayout) {
 
@@ -26,7 +25,7 @@ class Dice constructor(iFrameView: FrameLayout) {
         if (mFrameLayout.visibility == View.VISIBLE) {
 
             for (lItem in mDiceShapeMap) {
-                if (lItem!!.isVisible)
+                if (lItem!!.visibility == View.VISIBLE)
                     lItem.visibility = View.INVISIBLE
             }
 
