@@ -29,11 +29,6 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setCustomView(R.layout.action_bar_settings)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val lAttributes = window.attributes
-            lAttributes.layoutInDisplayCutoutMode =
-                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-        }
     }
 
     override fun onResume() {

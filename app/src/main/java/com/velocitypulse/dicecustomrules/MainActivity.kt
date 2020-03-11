@@ -54,7 +54,6 @@ class MainActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
 
         supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar!!.setCustomView(R.layout.action_bar_no_title)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val lAttributes = window.attributes
