@@ -12,22 +12,26 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.velocitypulse.dicecustomrules.core.LogManager
 import com.velocitypulse.dicecustomrules.core.PreferencesManager
+import com.velocitypulse.dicecustomrules.viewmodels.MainActivityViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
 
-    companion object {
-        private const val TAG = "MAIN ACTIVITY"
-        private const val RARITY_FACTOR = 2
-        private const val RANDOMIZING_UPDATE_TIME = 10
-        private const val THREAD_RANDOMIZING_TIME = 500
-    }
+    private val TAG = "MAIN ACTIVITY"
+    private val ROLLING_UPDATE_SPEED = 10L
 
-    private val mOneDiceValueMap: IntArray = IntArray(6)
+    lateinit var viewModel: MainActivityViewModel
+
     private val mRandom: Random = Random()
 
     private val mDiceList: MutableList<Dice> = ArrayList()
@@ -37,12 +41,14 @@ class MainActivity : AppCompatActivity() {
 
     private var mDiceBackground: ImageView? = null
     private var mAlphaNumericText: TextView? = null
-    private var mThread: Thread? = null
 
-    private var mDiceNumber: Int = 1
+    private var mRollingDiceJob: Job? = null
+    private var mNumberOfDice: Int = 1
     private var mTimerDiceUpdate: Long = 0
     private var mTimerThread: Long = 0
     private var mRandomizingDice = false
+
+
 
     private var mUpdateAlphaNumericText = false
     private var mSongEnabled = false
@@ -50,6 +56,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+
+        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
 
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
 
@@ -61,7 +69,8 @@ class MainActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
 
-        init()
+        initView()
+        initObserver()
     }
 
     override fun onResume() {
@@ -75,9 +84,10 @@ class MainActivity : AppCompatActivity() {
 
         mSongEnabled = PreferencesManager.getSongEnabled(this)
 
-        mDiceNumber = PreferencesManager.getDiceNumber(this)
-        updateDicesDisplayed()
-        notifyNewDiceSum()
+        mNumberOfDice = PreferencesManager.getDiceNumber(this)
+
+        viewModel.numberOfDice.value?.let { setDisplayedDices(it) }
+
         super.onResume()
     }
 
@@ -97,21 +107,23 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(iItem)
     }
 
-    fun init() {
+    fun initView() {
         LogManager.info(TAG, "Init")
 
-        mDiceList.add(Dice(findViewById(R.id.dice_1)))
-        mDiceList.add(Dice(findViewById(R.id.dice_2)))
-        mDiceList.add(Dice(findViewById(R.id.dice_3)))
-        mDiceList.add(Dice(findViewById(R.id.dice_4)))
-        mDiceList.add(Dice(findViewById(R.id.dice_5)))
-        mDiceList.add(Dice(findViewById(R.id.dice_6)))
-        mDiceList.add(Dice(findViewById(R.id.dice_7)))
-        mDiceList.add(Dice(findViewById(R.id.dice_8)))
-        mDiceList.add(Dice(findViewById(R.id.dice_9)))
-        mDiceList.add(Dice(findViewById(R.id.dice_10)))
-        mDiceList.add(Dice(findViewById(R.id.dice_11)))
-        mDiceList.add(Dice(findViewById(R.id.dice_12)))
+        mDiceList.apply {
+            add(Dice(findViewById(R.id.dice_1)))
+            add(Dice(findViewById(R.id.dice_2)))
+            add(Dice(findViewById(R.id.dice_3)))
+            add(Dice(findViewById(R.id.dice_4)))
+            add(Dice(findViewById(R.id.dice_5)))
+            add(Dice(findViewById(R.id.dice_6)))
+            add(Dice(findViewById(R.id.dice_7)))
+            add(Dice(findViewById(R.id.dice_8)))
+            add(Dice(findViewById(R.id.dice_9)))
+            add(Dice(findViewById(R.id.dice_10)))
+            add(Dice(findViewById(R.id.dice_11)))
+            add(Dice(findViewById(R.id.dice_12)))
+        }
 
         mPlayerDiceSong1 = MediaPlayer.create(this, R.raw.dice_song_1)
         mPlayerDiceSong2 = MediaPlayer.create(this, R.raw.dice_song_2)
@@ -119,10 +131,52 @@ class MainActivity : AppCompatActivity() {
         mAlphaNumericText = findViewById(R.id.alpha_numeric_text_view)
     }
 
-    fun updateDicesDisplayed() {
+    fun initObserver() {
+        viewModel.numberOfDice.observe(this, {
+            setDisplayedDices(it)
+        })
+
+        viewModel.playDiceSong.observe(this, {
+            playSong(it)
+        })
+
+        viewModel.diceValues.observe(this, {
+            setDiceValues(it)
+        })
+
+        viewModel.textDiceSum.observe(this, {
+            mAlphaNumericText?.text  = it
+        })
+
+        viewModel.isRandomizingDice.observe(this, {
+            if (it)
+                rollDice()
+            else
+                mRollingDiceJob?.cancel()
+        })
+    }
+
+    private fun rollDice() {
+        mRollingDiceJob = lifecycleScope.launch {
+            while (isActive) {
+                for (item in mDiceList) {
+                    item.setDiceShape(mRandom.nextInt(6))
+                }
+                delay(ROLLING_UPDATE_SPEED)
+            }
+        }
+    }
+
+    private fun setDiceValues(list: List<Int>) {
+        for (i in list.indices) {
+            mDiceList[i].setDiceShape(list[i])
+        }
+    }
+
+    fun setDisplayedDices(numberOfDice: Int) {
         var lIndex: Int = -1
 
-        while (++lIndex < mDiceNumber) {
+        while (++lIndex < numberOfDice) {
             mDiceList[lIndex].setVisibility(View.VISIBLE)
         }
         lIndex--
@@ -131,106 +185,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun randomizeDice() {
-        if (mRandomizingDice) {
-            LogManager.error(TAG, "Already randomizing dice")
-            return
-        }
-        mRandomizingDice = true
-
-        Thread(Runnable {
-
-            playSong()
-
-            mTimerDiceUpdate = System.currentTimeMillis()
-            mTimerThread = 0
-            while (true) {
-                val lCurrentTimeMillis: Long = System.currentTimeMillis()
-                val lElapsedTime: Long = lCurrentTimeMillis - mTimerDiceUpdate
-
-                if (lElapsedTime > RANDOMIZING_UPDATE_TIME) {
-
-                    runOnUiThread {
-                        for (lItem in mDiceList) {
-                            lItem.setDiceShape(mRandom.nextInt(6))
-                        }
-                    }
-
-                    mTimerDiceUpdate = lCurrentTimeMillis
-                    mTimerThread += lElapsedTime
-                }
-
-                if (mTimerThread > THREAD_RANDOMIZING_TIME) {
-                    runOnUiThread {
-                        if (mDiceNumber == 1)
-                            mDiceList[0].setDiceShape(getExcludedNumberOrRandom())
-                        else {
-                            for (lItem in mDiceList) {
-                                lItem.setDiceShape(mRandom.nextInt(6))
-                            }
-                        }
-                        notifyNewDiceSum()
-                    }
-                    break
-                }
-
-                Thread.sleep(10) // Slow down the while(true)
-            }
-            mRandomizingDice = false
-        }).start()
-
-    }
-
-    private fun getExcludedNumberOrRandom(): Int {
-        var lIndex = -1
-
-        while (++lIndex < 6) {
-            val lNumberOfShowedIndex = mOneDiceValueMap[lIndex]
-
-            for (lTotalList in mOneDiceValueMap) {
-                if (lTotalList - lNumberOfShowedIndex > RARITY_FACTOR) {
-                    LogManager.error(
-                        TAG,
-                        "Index '" + (lIndex + 1) + "' hasn't been printed since a long time..."
-                    )
-                    mOneDiceValueMap[lIndex] += 1
-                    return lIndex
-                }
-            }
-        }
-        val oValue = mRandom.nextInt(6)
-        mOneDiceValueMap[oValue] += 1
-        return oValue
-    }
-
-    private fun notifyNewDiceSum() {
-
-        var lSumValue = 0
-
-        for (lItem in mDiceList) {
-            lSumValue += lItem.getDiceValue()
-        }
-
-        LogManager.info(TAG, "NEW DICE : $lSumValue")
-        if (mUpdateAlphaNumericText) {
-            mAlphaNumericText?.text = lSumValue.toString()
-        }
-    }
-
-    private fun playSong() {
-        if (mSongEnabled) {
-            mPlayerDiceSong1?.seekTo(0)
-            mPlayerDiceSong2?.seekTo(0)
-            if (mRandom.nextInt(2) == 0)
-                mPlayerDiceSong1?.start()
-            else
-                mPlayerDiceSong2?.start()
-        }
+    private fun playSong(id: Int) {
+        mPlayerDiceSong1?.seekTo(0)
+        mPlayerDiceSong2?.seekTo(0)
+        if (id == 1)
+            mPlayerDiceSong1?.start()
+        else if (id == 2)
+            mPlayerDiceSong2?.start()
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun onScreenClick(iView: View) {
-        randomizeDice()
+        viewModel.onDiceClick()
     }
 }
 
