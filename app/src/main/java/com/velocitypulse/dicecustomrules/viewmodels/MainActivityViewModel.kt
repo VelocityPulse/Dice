@@ -43,8 +43,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         MutableLiveData<Boolean>()
     }
 
-    val textDiceSum: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
+    val diceSum: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
     }
 
     val isPlayingDiceSong: MutableLiveData<Int> by lazy {
@@ -85,12 +85,11 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
                 isRandomizingDice.postValue(false)
                 diceValues.postValue(list)
-                textDiceSum.postValue(list.sum().toString())
+                diceSum.postValue(list.sum())
 
             } catch (th: Throwable) {
                 th.printStackTrace()
             }
-
         }
     }
 

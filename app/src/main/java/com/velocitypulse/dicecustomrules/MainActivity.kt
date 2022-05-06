@@ -131,8 +131,8 @@ class MainActivity : AppCompatActivity() {
             setDiceValues(it)
         }
 
-        viewModel.textDiceSum.observe(this) {
-            mAlphaNumericText?.text = it
+        viewModel.diceSum.observe(this) {
+            mAlphaNumericText?.text = it.toString()
         }
 
         viewModel.isRandomizingDice.observe(this) {
@@ -143,7 +143,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.isDiceSumEnabled.observe(this) {
-
+            setSumTextVisibility(it)
         }
     }
 
