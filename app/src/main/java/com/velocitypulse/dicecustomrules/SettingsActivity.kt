@@ -1,6 +1,5 @@
 package com.velocitypulse.dicecustomrules
 
-import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -28,23 +27,22 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setCustomView(R.layout.action_bar_settings)
-
     }
 
     override fun onResume() {
         super.onResume()
         mDiceNumberPicker = findViewById(R.id.dice_number_picker)
         mDiceNumberPicker!!.setOnValueChangedListener { _, _, newVal ->
-            PreferencesManager.setDiceNumber(this, newVal)
+            PreferencesManager.setNumberOfDice(this, newVal)
         }
         mDiceNumberPicker!!.minValue = 1
         mDiceNumberPicker!!.maxValue = 12
-        mDiceNumberPicker!!.value = PreferencesManager.getDiceNumber(this)
+        mDiceNumberPicker!!.value = PreferencesManager.getNumberOfDice(this)
 
         val lAlphaNumericSwitch = findViewById<Switch>(R.id.alpha_numeric_switch)
         val lSongSwitch = findViewById<Switch>(R.id.song_switch)
 
-        if (PreferencesManager.getAlphaNumericShowing(this))
+        if (PreferencesManager.getDiceSumEnabled(this))
             lAlphaNumericSwitch.isChecked = true
         if (PreferencesManager.getSongEnabled(this))
             lSongSwitch.isChecked = true
@@ -61,7 +59,7 @@ class SettingsActivity : AppCompatActivity() {
     fun onAlphaNumericClick(iView: View) {
         iView as Switch
 
-        PreferencesManager.setAlphaNumericShowing(this, iView.isChecked)
+        PreferencesManager.setDiceSumEnabled(this, iView.isChecked)
     }
 
     fun onSongClick(iView: View) {

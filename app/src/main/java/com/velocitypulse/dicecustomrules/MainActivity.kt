@@ -15,14 +15,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.velocitypulse.dicecustomrules.core.LogManager
-import com.velocitypulse.dicecustomrules.core.PreferencesManager
 import com.velocitypulse.dicecustomrules.viewmodels.MainActivityViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,19 +37,11 @@ class MainActivity : AppCompatActivity() {
     private var mPlayerDiceSong1: MediaPlayer? = null
     private var mPlayerDiceSong2: MediaPlayer? = null
 
+    // TODO Impl
     private var mDiceBackground: ImageView? = null
     private var mAlphaNumericText: TextView? = null
 
     private var mRollingDiceJob: Job? = null
-    private var mNumberOfDice: Int = 1
-    private var mTimerDiceUpdate: Long = 0
-    private var mTimerThread: Long = 0
-    private var mRandomizingDice = false
-
-
-
-    private var mUpdateAlphaNumericText = false
-    private var mSongEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,21 +64,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        if (PreferencesManager.getAlphaNumericShowing(this)) {
-            mAlphaNumericText?.visibility = View.VISIBLE
-            mUpdateAlphaNumericText = true
-        } else {
-            mAlphaNumericText?.visibility = View.GONE
-            mUpdateAlphaNumericText = false
-        }
-
-        mSongEnabled = PreferencesManager.getSongEnabled(this)
-
-        mNumberOfDice = PreferencesManager.getDiceNumber(this)
+        viewModel.isDiceSumEnabled.value?.let { setSumTextVisibility(it) }
 
         viewModel.numberOfDice.value?.let { setDisplayedDices(it) }
 
         super.onResume()
+    }
+
+    fun setSumTextVisibility(visible: Boolean) {
+        if (visible)
+            mAlphaNumericText?.visibility = View.VISIBLE
+        else
+            mAlphaNumericText?.visibility = View.GONE
     }
 
     override fun onCreateOptionsMenu(iMenu: Menu?): Boolean {
@@ -132,28 +119,32 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun initObserver() {
-        viewModel.numberOfDice.observe(this, {
+        viewModel.numberOfDice.observe(this) {
             setDisplayedDices(it)
-        })
+        }
 
-        viewModel.playDiceSong.observe(this, {
+        viewModel.isPlayingDiceSong.observe(this) {
             playSong(it)
-        })
+        }
 
-        viewModel.diceValues.observe(this, {
+        viewModel.diceValues.observe(this) {
             setDiceValues(it)
-        })
+        }
 
-        viewModel.textDiceSum.observe(this, {
-            mAlphaNumericText?.text  = it
-        })
+        viewModel.textDiceSum.observe(this) {
+            mAlphaNumericText?.text = it
+        }
 
-        viewModel.isRandomizingDice.observe(this, {
+        viewModel.isRandomizingDice.observe(this) {
             if (it)
                 rollDice()
             else
                 mRollingDiceJob?.cancel()
-        })
+        }
+
+        viewModel.isDiceSumEnabled.observe(this) {
+
+        }
     }
 
     private fun rollDice() {

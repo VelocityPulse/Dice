@@ -1,24 +1,30 @@
 package com.velocitypulse.dicecustomrules.viewmodels
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.velocitypulse.dicecustomrules.core.LogManager
+import com.velocitypulse.dicecustomrules.repositories.AppSettingsRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivityViewModel : ViewModel() {
+class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 
     private val TAG: String = "MAIN ACTIVITY VIEW MODEL"
     private val RANDOMIZING_TIME = 500L
     private val MAXIMUM_GAP = 2
 
     private var mTimerDiceUpdate: Long = 0
+    private var mIsSongEnabled = true
     private val mNumberOfTimeAFaceHasBeenSeenMap: IntArray = IntArray(6)
     private val mRandom: Random = Random()
-    private var mSongEnabled = true
+
+    private val mAppSettingsRepository by lazy {
+        AppSettingsRepository(getApplication())
+    }
 
     val numberOfDice: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>()
@@ -32,16 +38,26 @@ class MainActivityViewModel : ViewModel() {
         MutableLiveData<Boolean>()
     }
 
+    // TODO impl observer
+    val isDiceSumEnabled: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
     val textDiceSum: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 
-    val playDiceSong: MutableLiveData<Int> by lazy {
+    val isPlayingDiceSong: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>()
     }
 
     init {
-        numberOfDice.value = 1
+        viewModelScope.launch {
+            isDiceSumEnabled.postValue(mAppSettingsRepository.getIsDiceSumEnabled())
+            numberOfDice.postValue(mAppSettingsRepository.getNumberOfDice())
+
+            mIsSongEnabled = mAppSettingsRepository.getIsSongEnabled()
+        }
     }
 
     fun onDiceClick() {
@@ -96,19 +112,19 @@ class MainActivityViewModel : ViewModel() {
             }
         }
 
-        val oValue = mRandom.nextInt(6)
-        mNumberOfTimeAFaceHasBeenSeenMap[oValue] += 1
-        return oValue
+        val ret = mRandom.nextInt(6)
+        mNumberOfTimeAFaceHasBeenSeenMap[ret] += 1
+        return ret
     }
 
     private fun playSong() {
-        if (mSongEnabled) {
+        if (mIsSongEnabled) {
             if (mRandom.nextInt(2) == 0)
-                playDiceSong.postValue(1)
+                isPlayingDiceSong.postValue(1)
             else
-                playDiceSong.postValue(2)
+                isPlayingDiceSong.postValue(2)
 
-            playDiceSong.value = 0
+            isPlayingDiceSong.value = 0
         }
     }
 }
