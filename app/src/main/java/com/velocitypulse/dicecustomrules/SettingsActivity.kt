@@ -5,7 +5,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.NumberPicker
-import android.widget.Switch
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
