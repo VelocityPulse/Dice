@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private val TAG = "MAIN ACTIVITY"
     private val ROLLING_UPDATE_SPEED = 10L
 
-    lateinit var viewModel: MainActivityViewModel
+    private lateinit var viewModel: MainActivityViewModel
 
     private val mRandom: Random = Random()
 
@@ -64,11 +64,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        viewModel.isDiceSumEnabled.value?.let { setSumTextVisibility(it) }
-
-        viewModel.numberOfDice.value?.let { setDisplayedDices(it) }
-
         super.onResume()
+
+        lifecycleScope.launch { viewModel.refreshData() }
     }
 
     fun setSumTextVisibility(visible: Boolean) {

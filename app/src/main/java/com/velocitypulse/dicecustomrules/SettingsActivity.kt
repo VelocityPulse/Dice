@@ -8,44 +8,50 @@ import android.widget.NumberPicker
 import android.widget.Switch
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import com.velocitypulse.dicecustomrules.core.PreferencesManager
+import androidx.appcompat.widget.SwitchCompat
+import androidx.lifecycle.ViewModelProvider
+import com.velocitypulse.dicecustomrules.viewmodels.SettingsActivityViewModel
 
 class SettingsActivity : AppCompatActivity() {
 
-    companion object {
-        private const val TAG = "SETTINGS ACTIVITY"
-    }
+    private val TAG = "SETTINGS ACTIVITY"
 
-    var mDiceNumberPicker: NumberPicker? = null
+    private lateinit var viewModel: SettingsActivityViewModel
+
+    private var mSongSwitch: SwitchCompat? = null
+    private var mDiceSumSwitch: SwitchCompat? = null
+    private var mDiceNumberPicker: NumberPicker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
 
+        viewModel = ViewModelProvider(this).get(SettingsActivityViewModel::class.java)
+
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
 
-        supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setCustomView(R.layout.action_bar_settings)
+        supportActionBar?.let {
+            it.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setCustomView(R.layout.action_bar_settings)
+        }
+
+        initView()
+        initObservers()
+
     }
 
     override fun onResume() {
         super.onResume()
-        mDiceNumberPicker = findViewById(R.id.dice_number_picker)
-        mDiceNumberPicker!!.setOnValueChangedListener { _, _, newVal ->
-            PreferencesManager.setNumberOfDice(this, newVal)
+
+        mDiceNumberPicker?.let {
+            it.minValue = 1
+            it.maxValue = 12
         }
-        mDiceNumberPicker!!.minValue = 1
-        mDiceNumberPicker!!.maxValue = 12
-        mDiceNumberPicker!!.value = PreferencesManager.getNumberOfDice(this)
 
-        val lAlphaNumericSwitch = findViewById<Switch>(R.id.alpha_numeric_switch)
-        val lSongSwitch = findViewById<Switch>(R.id.song_switch)
-
-        if (PreferencesManager.getDiceSumEnabled(this))
-            lAlphaNumericSwitch.isChecked = true
-        if (PreferencesManager.getSongEnabled(this))
-            lSongSwitch.isChecked = true
+        viewModel.numberOfDice.value?.let { mDiceNumberPicker?.value = it }
+        viewModel.isDiceSumEnabled.value?.let { mDiceSumSwitch?.isChecked = it }
+        viewModel.isSongEnabled.value?.let { mSongSwitch?.isChecked = it }
     }
 
     override fun onOptionsItemSelected(iItem: MenuItem): Boolean {
@@ -56,15 +62,27 @@ class SettingsActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(iItem)
     }
 
-    fun onAlphaNumericClick(iView: View) {
-        iView as Switch
+    fun initView() {
+        mDiceNumberPicker = findViewById(R.id.dice_number_picker)
+        mDiceSumSwitch = findViewById(R.id.dice_sum_switch)
+        mSongSwitch = findViewById(R.id.song_switch)
 
-        PreferencesManager.setDiceSumEnabled(this, iView.isChecked)
+        mDiceNumberPicker!!.setOnValueChangedListener { _, _, newVal ->
+            viewModel.setNumberOfDice(newVal)
+        }
     }
 
-    fun onSongClick(iView: View) {
-        iView as Switch
+    private fun initObservers() {
+        viewModel.numberOfDice.observe(this) { num -> mDiceNumberPicker?.value = num }
+        viewModel.isDiceSumEnabled.observe(this) { enabled -> mDiceSumSwitch?.isChecked = enabled }
+        viewModel.isSongEnabled.observe(this) { enabled -> mSongSwitch?.isChecked = enabled }
+    }
 
-        PreferencesManager.setSongEnabled(this, iView.isChecked)
+    fun onDiceSumSwitchClick(view: View) {
+        viewModel.setIsDiceSumEnabled((view as SwitchCompat).isChecked)
+    }
+
+    fun onSongSwitchClick(view: View) {
+        viewModel.setIsSongEnabled((view as SwitchCompat).isChecked)
     }
 }

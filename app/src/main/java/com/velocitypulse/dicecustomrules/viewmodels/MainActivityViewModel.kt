@@ -9,17 +9,15 @@ import com.velocitypulse.dicecustomrules.repositories.AppSettingsRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 
     private val TAG: String = "MAIN ACTIVITY VIEW MODEL"
     private val RANDOMIZING_TIME = 500L
-    private val MAXIMUM_GAP = 2
+    private val MAXIMUM_GAP = 3
 
-    private var mTimerDiceUpdate: Long = 0
-    private var mIsSongEnabled = true
-    private val mNumberOfTimeAFaceHasBeenSeenMap: IntArray = IntArray(6)
+    private var mIsSongEnabled: Boolean = true
+    private val mDiceListOfSeenFace: MutableList<IntArray> = ArrayList()
     private val mRandom: Random = Random()
 
     private val mAppSettingsRepository by lazy {
@@ -38,7 +36,6 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         MutableLiveData<Boolean>()
     }
 
-    // TODO impl observer
     val isDiceSumEnabled: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
@@ -52,12 +49,23 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     }
 
     init {
-        viewModelScope.launch {
-            isDiceSumEnabled.postValue(mAppSettingsRepository.getIsDiceSumEnabled())
-            numberOfDice.postValue(mAppSettingsRepository.getNumberOfDice())
+        viewModelScope.launch { refreshData() }
+    }
 
-            mIsSongEnabled = mAppSettingsRepository.getIsSongEnabled()
+    suspend fun refreshData() {
+        isDiceSumEnabled.postValue(mAppSettingsRepository.getIsDiceSumEnabled())
+        numberOfDice.postValue(mAppSettingsRepository.getNumberOfDice())
+
+        mAppSettingsRepository.getNumberOfDice().let {
+            numberOfDice.postValue(it)
+
+            mDiceListOfSeenFace.clear()
+
+            for (index in 1..it)
+                mDiceListOfSeenFace.add(IntArray(6))
         }
+
+        mIsSongEnabled = mAppSettingsRepository.getIsSongEnabled()
     }
 
     fun onDiceClick() {
@@ -80,7 +88,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
                 var i = -1
                 while (++i < numberOfDice.value!!) {
-                    list.add(getExcludedNumberOrRandom())
+                    list.add(getExcludedNumberOrRandom(mDiceListOfSeenFace[i]))
                 }
 
                 isRandomizingDice.postValue(false)
@@ -93,26 +101,26 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
-    private fun getExcludedNumberOrRandom(): Int {
+    private fun getExcludedNumberOrRandom(numberOfTimeAFaceHasBeenSeenMap: IntArray): Int {
         // Calculating the gap between all numbers inside mNumberOfTimeAFaceHasBeenSeenMap
-        for (lCheckedFace in mNumberOfTimeAFaceHasBeenSeenMap.indices) {
+        for (lCheckedFace in numberOfTimeAFaceHasBeenSeenMap.indices) {
 
-            for (lItem in mNumberOfTimeAFaceHasBeenSeenMap) {
-                if (lItem - mNumberOfTimeAFaceHasBeenSeenMap[lCheckedFace] > MAXIMUM_GAP) {
+            for (lItem in numberOfTimeAFaceHasBeenSeenMap) {
+                if (lItem - numberOfTimeAFaceHasBeenSeenMap[lCheckedFace] > MAXIMUM_GAP) {
                     LogManager.error(
                         TAG,
                         "Index '" + (lCheckedFace + 1) + "' hasn't been printed since a long time..."
                     )
 
                     // A big gap has been found so we fix it by returning the excluded number
-                    mNumberOfTimeAFaceHasBeenSeenMap[lCheckedFace] += 1
+                    numberOfTimeAFaceHasBeenSeenMap[lCheckedFace] += 1
                     return lCheckedFace
                 }
             }
         }
 
         val ret = mRandom.nextInt(6)
-        mNumberOfTimeAFaceHasBeenSeenMap[ret] += 1
+        numberOfTimeAFaceHasBeenSeenMap[ret] += 1
         return ret
     }
 

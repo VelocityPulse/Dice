@@ -14,22 +14,22 @@
         android:orientation="vertical"
         android:paddingTop="40dp">
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/song_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onSongClick"
+            android:onClick="onSongSwitchClick"
             android:paddingTop="@dimen/switch_vertical_padding"
             android:paddingBottom="@dimen/switch_vertical_padding"
             android:text="Sound"
             android:textColor="@android:color/white"
             android:textSize="@dimen/switch_text_size" />
 
-        <Switch
-            android:id="@+id/alpha_numeric_switch"
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/dice_sum_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onAlphaNumericClick"
+            android:onClick="onDiceSumSwitchClick"
             android:paddingTop="@dimen/switch_vertical_padding"
             android:paddingBottom="@dimen/switch_vertical_padding"
             android:text="Show alpha numeric sum"
