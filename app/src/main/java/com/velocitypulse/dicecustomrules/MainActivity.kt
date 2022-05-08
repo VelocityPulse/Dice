@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private val TAG = "MAIN ACTIVITY"
     private val ROLLING_UPDATE_SPEED = 10L
 
-    private lateinit var viewModel: MainActivityViewModel
+    private lateinit var mViewModel: MainActivityViewModel
 
     private val mRandom: Random = Random()
 
@@ -47,7 +47,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
-        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+        mViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+        lifecycleScope.launchWhenCreated { mViewModel.refreshData() }
 
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
 
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        lifecycleScope.launch { viewModel.refreshData() }
+        lifecycleScope.launch { mViewModel.refreshData() }
     }
 
     fun setSumTextVisibility(visible: Boolean) {
@@ -117,30 +118,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun initObserver() {
-        viewModel.numberOfDice.observe(this) {
+        mViewModel.numberOfDice.observe(this) {
             setDisplayedDices(it)
         }
 
-        viewModel.isPlayingDiceSong.observe(this) {
+        mViewModel.isPlayingDiceSong.observe(this) {
             playSong(it)
         }
 
-        viewModel.diceValues.observe(this) {
+        mViewModel.diceValues.observe(this) {
             setDiceValues(it)
         }
 
-        viewModel.diceSum.observe(this) {
+        mViewModel.diceSum.observe(this) {
             mAlphaNumericText?.text = it.toString()
         }
 
-        viewModel.isRandomizingDice.observe(this) {
+        mViewModel.isRandomizingDice.observe(this) {
             if (it)
                 rollDice()
             else
                 mRollingDiceJob?.cancel()
         }
 
-        viewModel.isDiceSumEnabled.observe(this) {
+        mViewModel.isDiceSumEnabled.observe(this) {
             setSumTextVisibility(it)
         }
     }
@@ -149,7 +150,7 @@ class MainActivity : AppCompatActivity() {
         mRollingDiceJob = lifecycleScope.launch {
             while (isActive) {
                 for (item in mDiceList) {
-                    item.setDiceShape(mRandom.nextInt(6))
+                    item.setDiceShape(mViewModel.getRandomDiceShape())
                 }
                 delay(ROLLING_UPDATE_SPEED)
             }
@@ -185,7 +186,7 @@ class MainActivity : AppCompatActivity() {
 
     @Suppress("UNUSED_PARAMETER")
     fun onScreenClick(iView: View) {
-        viewModel.onDiceClick()
+        mViewModel.onDiceClick()
     }
 }
 

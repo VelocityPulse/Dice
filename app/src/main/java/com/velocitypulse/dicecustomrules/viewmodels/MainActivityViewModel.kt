@@ -13,12 +13,13 @@ import java.util.*
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 
     private val TAG: String = "MAIN ACTIVITY VIEW MODEL"
-    private val RANDOMIZING_TIME = 500L
     private val MAXIMUM_GAP = 3
 
-    private var mIsSongEnabled: Boolean = true
     private val mDiceListOfSeenFace: MutableList<IntArray> = ArrayList()
     private val mRandom: Random = Random()
+    private var mIsSongEnabled = true
+
+    var mRandomizingTime = 500L
 
     private val mAppSettingsRepository by lazy {
         AppSettingsRepository(getApplication())
@@ -49,10 +50,12 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     }
 
     init {
-        viewModelScope.launch { refreshData() }
+//        viewModelScope.launch { refreshData() }
     }
 
     suspend fun refreshData() {
+        LogManager.tests("refreshdata")
+
         isDiceSumEnabled.postValue(mAppSettingsRepository.getIsDiceSumEnabled())
         numberOfDice.postValue(mAppSettingsRepository.getNumberOfDice())
 
@@ -66,6 +69,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         }
 
         mIsSongEnabled = mAppSettingsRepository.getIsSongEnabled()
+
+        LogManager.tests("refresh finished")
     }
 
     fun onDiceClick() {
@@ -81,20 +86,19 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
         viewModelScope.launch {
             isRandomizingDice.postValue(true)
-            delay(RANDOMIZING_TIME)
+            delay(mRandomizingTime)
 
             try {
-                val list = ArrayList<Int>(numberOfDice.value!!)
+                val newDices = ArrayList<Int>(numberOfDice.value!!)
 
                 var i = -1
                 while (++i < numberOfDice.value!!) {
-                    list.add(getExcludedNumberOrRandom(mDiceListOfSeenFace[i]))
+                    newDices.add(getExcludedNumberOrRandom(mDiceListOfSeenFace[i]))
                 }
 
                 isRandomizingDice.postValue(false)
-                diceValues.postValue(list)
-                diceSum.postValue(list.sum())
-
+                diceValues.postValue(newDices)
+                diceSum.postValue(newDices.sum())
             } catch (th: Throwable) {
                 th.printStackTrace()
             }
@@ -119,9 +123,13 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             }
         }
 
-        val ret = mRandom.nextInt(6)
+        val ret = getRandomDiceShape()
         numberOfTimeAFaceHasBeenSeenMap[ret] += 1
         return ret
+    }
+
+    fun getRandomDiceShape(): Int {
+        return mRandom.nextInt(5) + 1
     }
 
     private fun playSong() {

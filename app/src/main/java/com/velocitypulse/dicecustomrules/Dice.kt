@@ -21,6 +21,9 @@ class Dice constructor(iFrameView: FrameLayout) {
         mDiceShapeMap[5] = mFrameLayout.findViewById(R.id.dice_shape_6)
     }
 
+    /**
+     * TODO kdoc & dokka
+     */
     fun setDiceShape(iNumber: Int) {
         if (mFrameLayout.visibility == View.VISIBLE) {
 
@@ -29,8 +32,8 @@ class Dice constructor(iFrameView: FrameLayout) {
                     lItem.visibility = View.INVISIBLE
             }
 
-            mDiceShapeMap[iNumber]!!.visibility = View.VISIBLE
-            mDiceValue = iNumber + 1
+            mDiceShapeMap[iNumber - 1]!!.visibility = View.VISIBLE
+            mDiceValue = iNumber // from 1 to 6
         }
     }
 
