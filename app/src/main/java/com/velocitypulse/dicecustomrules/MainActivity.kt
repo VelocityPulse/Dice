@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private val TAG = "MAIN ACTIVITY"
     private val ROLLING_UPDATE_SPEED = 10L
 
-    private lateinit var mViewModel: MainActivityViewModel
+    lateinit var mViewModel: MainActivityViewModel
 
     private val mRandom: Random = Random()
 

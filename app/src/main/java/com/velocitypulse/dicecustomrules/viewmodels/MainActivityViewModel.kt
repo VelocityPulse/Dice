@@ -13,6 +13,7 @@ import java.util.*
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 
     private val TAG: String = "MAIN ACTIVITY VIEW MODEL"
+    private val MAX_DICE: Int = 12 // Todo : Set to Application
     private val MAXIMUM_GAP = 3
 
     private val mDiceListOfSeenFace: MutableList<IntArray> = ArrayList()
@@ -49,12 +50,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         MutableLiveData<Int>()
     }
 
-    init {
-//        viewModelScope.launch { refreshData() }
-    }
-
     suspend fun refreshData() {
-        LogManager.tests("refreshdata")
+        LogManager.tests("refresh data")
 
         isDiceSumEnabled.postValue(mAppSettingsRepository.getIsDiceSumEnabled())
         numberOfDice.postValue(mAppSettingsRepository.getNumberOfDice())
@@ -64,7 +61,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
             mDiceListOfSeenFace.clear()
 
-            for (index in 1..it)
+            for (index in 1..12)
                 mDiceListOfSeenFace.add(IntArray(6))
         }
 
@@ -92,33 +89,35 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
                 val newDices = ArrayList<Int>(numberOfDice.value!!)
 
                 var i = -1
-                while (++i < numberOfDice.value!!) {
+                while (++i < numberOfDice.value!!)
                     newDices.add(getExcludedNumberOrRandom(mDiceListOfSeenFace[i]))
-                }
 
-                isRandomizingDice.postValue(false)
                 diceValues.postValue(newDices)
                 diceSum.postValue(newDices.sum())
             } catch (th: Throwable) {
                 th.printStackTrace()
+            } finally {
+                isRandomizingDice.postValue(false)
             }
         }
     }
 
     private fun getExcludedNumberOrRandom(numberOfTimeAFaceHasBeenSeenMap: IntArray): Int {
         // Calculating the gap between all numbers inside mNumberOfTimeAFaceHasBeenSeenMap
-        for (lCheckedFace in numberOfTimeAFaceHasBeenSeenMap.indices) {
+        for (lTestedFace in numberOfTimeAFaceHasBeenSeenMap.indices) {
 
             for (lItem in numberOfTimeAFaceHasBeenSeenMap) {
-                if (lItem - numberOfTimeAFaceHasBeenSeenMap[lCheckedFace] > MAXIMUM_GAP) {
+                if (lItem - numberOfTimeAFaceHasBeenSeenMap[lTestedFace] > MAXIMUM_GAP) {
                     LogManager.error(
                         TAG,
-                        "Index '" + (lCheckedFace + 1) + "' hasn't been printed since a long time..."
+                        "Index '" + (lTestedFace + 1) + "' hasn't been printed since a long time..."
                     )
 
                     // A big gap has been found so we fix it by returning the excluded number
-                    numberOfTimeAFaceHasBeenSeenMap[lCheckedFace] += 1
-                    return lCheckedFace
+                    numberOfTimeAFaceHasBeenSeenMap[lTestedFace] += 1
+
+                    LogManager.tests("excluded number returning : ${lTestedFace + 1}")
+                    return lTestedFace + 1
                 }
             }
         }
