@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
@@ -8,7 +9,7 @@
     android:paddingTop="?attr/actionBarSize"
     android:paddingEnd="20dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -23,7 +24,8 @@
             android:paddingBottom="@dimen/switch_vertical_padding"
             android:text="Sound"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/switch_text_size" />
+            android:textSize="@dimen/switch_text_size"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/dice_sum_switch"
@@ -34,12 +36,13 @@
             android:paddingBottom="@dimen/switch_vertical_padding"
             android:text="Show alpha numeric sum"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/switch_text_size" />
+            android:textSize="@dimen/switch_text_size"
+            app:layout_constraintTop_toBottomOf="@id/song_switch" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            app:layout_constraintTop_toBottomOf="@id/dice_sum_switch">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -48,24 +51,21 @@
                 android:alpha="1"
                 android:text="Number of dices"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/switch_text_size" />
+                android:textSize="@dimen/switch_text_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="end">
+            <NumberPicker
+                android:id="@+id/dice_number_picker"
+                android:layout_width="80dp"
+                android:layout_height="130dp"
+                android:theme="@android:style/Theme.Material"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
 
-                <NumberPicker
-                    android:id="@+id/dice_number_picker"
-                    android:layout_width="80dp"
-                    android:layout_height="130dp"
-                    android:theme="@android:style/Theme.Material" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
