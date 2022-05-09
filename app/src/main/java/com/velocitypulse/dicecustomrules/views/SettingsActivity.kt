@@ -36,7 +36,6 @@ class SettingsActivity : AppCompatActivity() {
 
         initView()
         initObservers()
-
     }
 
     override fun onResume() {
