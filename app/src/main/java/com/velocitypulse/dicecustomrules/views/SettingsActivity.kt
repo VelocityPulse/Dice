@@ -1,4 +1,4 @@
-package com.velocitypulse.dicecustomrules
+package com.velocitypulse.dicecustomrules.views
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -9,6 +9,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.ViewModelProvider
+import com.velocitypulse.dicecustomrules.R
 import com.velocitypulse.dicecustomrules.viewmodels.SettingsActivityViewModel
 
 class SettingsActivity : AppCompatActivity() {

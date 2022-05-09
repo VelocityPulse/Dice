@@ -1,4 +1,4 @@
-package com.velocitypulse.dicecustomrules
+package com.velocitypulse.dicecustomrules.views
 
 import android.content.Intent
 import android.media.MediaPlayer
@@ -14,6 +14,8 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.velocitypulse.dicecustomrules.Dice
+import com.velocitypulse.dicecustomrules.R
 import com.velocitypulse.dicecustomrules.core.LogManager
 import com.velocitypulse.dicecustomrules.viewmodels.MainActivityViewModel
 import kotlinx.coroutines.Job
