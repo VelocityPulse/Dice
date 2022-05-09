@@ -71,7 +71,6 @@
             layout="@layout/dice"
             android:visibility="gone" />
 
-
     </GridLayout>
 
         <View

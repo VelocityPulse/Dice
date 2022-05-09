@@ -14,7 +14,6 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.velocitypulse.dicecustomrules.Dice
 import com.velocitypulse.dicecustomrules.R
 import com.velocitypulse.dicecustomrules.core.LogManager
 import com.velocitypulse.dicecustomrules.viewmodels.MainActivityViewModel
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     private val mRandom: Random = Random()
 
-    private val mDiceList: MutableList<Dice> = ArrayList()
+    private lateinit var mDiceViewList: List<DiceView>
 
     private var mPlayerDiceSong1: MediaPlayer? = null
     private var mPlayerDiceSong2: MediaPlayer? = null
@@ -98,20 +97,19 @@ class MainActivity : AppCompatActivity() {
     fun initView() {
         LogManager.info(TAG, "Init")
 
-        mDiceList.apply {
-            add(Dice(findViewById(R.id.dice_1)))
-            add(Dice(findViewById(R.id.dice_2)))
-            add(Dice(findViewById(R.id.dice_3)))
-            add(Dice(findViewById(R.id.dice_4)))
-            add(Dice(findViewById(R.id.dice_5)))
-            add(Dice(findViewById(R.id.dice_6)))
-            add(Dice(findViewById(R.id.dice_7)))
-            add(Dice(findViewById(R.id.dice_8)))
-            add(Dice(findViewById(R.id.dice_9)))
-            add(Dice(findViewById(R.id.dice_10)))
-            add(Dice(findViewById(R.id.dice_11)))
-            add(Dice(findViewById(R.id.dice_12)))
-        }
+        mDiceViewList = listOf(
+            DiceView(findViewById(R.id.dice_1)),
+            DiceView(findViewById(R.id.dice_2)),
+            DiceView(findViewById(R.id.dice_3)),
+            DiceView(findViewById(R.id.dice_4)),
+            DiceView(findViewById(R.id.dice_5)),
+            DiceView(findViewById(R.id.dice_6)),
+            DiceView(findViewById(R.id.dice_7)),
+            DiceView(findViewById(R.id.dice_8)),
+            DiceView(findViewById(R.id.dice_9)),
+            DiceView(findViewById(R.id.dice_10)),
+            DiceView(findViewById(R.id.dice_11)),
+            DiceView(findViewById(R.id.dice_12)))
 
         mPlayerDiceSong1 = MediaPlayer.create(this, R.raw.dice_song_1)
         mPlayerDiceSong2 = MediaPlayer.create(this, R.raw.dice_song_2)
@@ -151,7 +149,7 @@ class MainActivity : AppCompatActivity() {
     private fun rollDice() {
         mRollingDiceJob = lifecycleScope.launch {
             while (isActive) {
-                for (item in mDiceList) {
+                for (item in mDiceViewList) {
                     item.setDiceShape(mViewModel.getRandomDiceShape())
                 }
                 delay(ROLLING_UPDATE_SPEED)
@@ -161,7 +159,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setDiceValues(list: List<Int>) {
         for (i in list.indices) {
-            mDiceList[i].setDiceShape(list[i])
+            mDiceViewList[i].setDiceShape(list[i])
         }
     }
 
@@ -169,11 +167,11 @@ class MainActivity : AppCompatActivity() {
         var lIndex: Int = -1
 
         while (++lIndex < numberOfDice) {
-            mDiceList[lIndex].setVisibility(View.VISIBLE)
+            mDiceViewList[lIndex].setVisibility(View.VISIBLE)
         }
         lIndex--
         while (++lIndex < 12) {
-            mDiceList[lIndex].setVisibility(View.GONE)
+            mDiceViewList[lIndex].setVisibility(View.GONE)
         }
     }
 
@@ -191,4 +189,3 @@ class MainActivity : AppCompatActivity() {
         mViewModel.onDiceClick()
     }
 }
-

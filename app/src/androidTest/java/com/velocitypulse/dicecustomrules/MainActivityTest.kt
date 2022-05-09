@@ -7,6 +7,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.velocitypulse.dicecustomrules.core.LogManager
 import com.velocitypulse.dicecustomrules.repositories.AppSettingsRepository
+import com.velocitypulse.dicecustomrules.views.DiceView
 import com.velocitypulse.dicecustomrules.views.MainActivity
 import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
@@ -46,23 +47,23 @@ class MainActivityTest : TestCase() {
             activityScenario.onActivity { activity ->
                 val sum = activity.findViewById<TextView>(R.id.alpha_numeric_text_view).text
 
-                val diceList: List<Dice> = arrayListOf(
-                    Dice(activity.findViewById(R.id.dice_1)),
-                    Dice(activity.findViewById(R.id.dice_2)),
-                    Dice(activity.findViewById(R.id.dice_3)),
-                    Dice(activity.findViewById(R.id.dice_4)),
-                    Dice(activity.findViewById(R.id.dice_5)),
-                    Dice(activity.findViewById(R.id.dice_6)),
-                    Dice(activity.findViewById(R.id.dice_7)),
-                    Dice(activity.findViewById(R.id.dice_8)),
-                    Dice(activity.findViewById(R.id.dice_9)),
-                    Dice(activity.findViewById(R.id.dice_10)),
-                    Dice(activity.findViewById(R.id.dice_11)),
-                    Dice(activity.findViewById(R.id.dice_12))
+                val diceViewList: List<DiceView> = arrayListOf(
+                    DiceView(activity.findViewById(R.id.dice_1)),
+                    DiceView(activity.findViewById(R.id.dice_2)),
+                    DiceView(activity.findViewById(R.id.dice_3)),
+                    DiceView(activity.findViewById(R.id.dice_4)),
+                    DiceView(activity.findViewById(R.id.dice_5)),
+                    DiceView(activity.findViewById(R.id.dice_6)),
+                    DiceView(activity.findViewById(R.id.dice_7)),
+                    DiceView(activity.findViewById(R.id.dice_8)),
+                    DiceView(activity.findViewById(R.id.dice_9)),
+                    DiceView(activity.findViewById(R.id.dice_10)),
+                    DiceView(activity.findViewById(R.id.dice_11)),
+                    DiceView(activity.findViewById(R.id.dice_12))
                 )
 
                 var viewSum = 0
-                for (item in diceList) {
+                for (item in diceViewList) {
                     viewSum += item.getDiceValue()
                 }
                 assertEquals(viewSum, sum.toString().toInt())

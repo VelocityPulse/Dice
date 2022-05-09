@@ -1,10 +1,11 @@
-package com.velocitypulse.dicecustomrules
+package com.velocitypulse.dicecustomrules.views
 
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
+import com.velocitypulse.dicecustomrules.R
 
-class Dice constructor(iFrameView: FrameLayout) {
+class DiceView constructor(iFrameView: FrameLayout) {
 
     private val mFrameLayout: FrameLayout = iFrameView
     private val mDiceShapeMap: List<ImageView>
@@ -39,11 +40,11 @@ class Dice constructor(iFrameView: FrameLayout) {
         if (mFrameLayout.visibility == View.VISIBLE) {
 
             for (lItem in mDiceShapeMap) {
-                if (lItem!!.visibility == View.VISIBLE)
+                if (lItem.visibility == View.VISIBLE)
                     lItem.visibility = View.INVISIBLE
             }
 
-            mDiceShapeMap[iNumber - 1]!!.visibility = View.VISIBLE
+            mDiceShapeMap[iNumber - 1].visibility = View.VISIBLE
             mDiceValue = iNumber // from 1 to 6
         }
     }
