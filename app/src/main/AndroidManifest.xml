@@ -9,6 +9,7 @@
     <application
         android:icon="@mipmap/ic_launcher_dice"
         android:label="@string/app_name_short"
+        android:name=".DiceApplication"
         android:roundIcon="@mipmap/ic_launcher_dice_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">

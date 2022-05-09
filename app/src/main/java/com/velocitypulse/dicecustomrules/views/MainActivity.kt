@@ -4,10 +4,7 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
@@ -51,15 +48,7 @@ class MainActivity : AppCompatActivity() {
         mViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         lifecycleScope.launchWhenCreated { mViewModel.refreshData() }
 
-        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-
         supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val lAttributes = window.attributes
-            lAttributes.layoutInDisplayCutoutMode =
-                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-        }
 
         initView()
         initObserver()

@@ -28,8 +28,6 @@ class SettingsActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(SettingsActivityViewModel::class.java)
 
-        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-
         supportActionBar?.let {
             it.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
             it.setDisplayHomeAsUpEnabled(true)
