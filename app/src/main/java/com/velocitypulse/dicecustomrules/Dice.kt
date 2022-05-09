@@ -7,18 +7,29 @@ import android.widget.ImageView
 class Dice constructor(iFrameView: FrameLayout) {
 
     private val mFrameLayout: FrameLayout = iFrameView
-    private val mDiceShapeMap = Array<ImageView?>(6) { null }
+    private val mDiceShapeMap: List<ImageView>
     private var mDiceBackground: ImageView? = null
 
     private var mDiceValue: Int = 1
 
     init {
-        mDiceShapeMap[0] = mFrameLayout.findViewById(R.id.dice_shape_1)
-        mDiceShapeMap[1] = mFrameLayout.findViewById(R.id.dice_shape_2)
-        mDiceShapeMap[2] = mFrameLayout.findViewById(R.id.dice_shape_3)
-        mDiceShapeMap[3] = mFrameLayout.findViewById(R.id.dice_shape_4)
-        mDiceShapeMap[4] = mFrameLayout.findViewById(R.id.dice_shape_5)
-        mDiceShapeMap[5] = mFrameLayout.findViewById(R.id.dice_shape_6)
+        mFrameLayout.apply {
+            mDiceShapeMap = arrayListOf(
+                findViewById(R.id.dice_shape_1),
+                findViewById(R.id.dice_shape_2),
+                findViewById(R.id.dice_shape_3),
+                findViewById(R.id.dice_shape_4),
+                findViewById(R.id.dice_shape_5),
+                findViewById(R.id.dice_shape_6)
+            )
+        }
+
+        for (i in mDiceShapeMap.indices) {
+            if (mDiceShapeMap[i].visibility == View.VISIBLE) {
+                mDiceValue = i + 1
+                break
+            }
+        }
     }
 
     /**

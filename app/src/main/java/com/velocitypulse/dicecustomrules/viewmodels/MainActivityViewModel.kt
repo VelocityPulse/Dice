@@ -34,16 +34,16 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         MutableLiveData<List<Int>>()
     }
 
-    val isRandomizingDice: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
+    val diceSum: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
     }
 
     val isDiceSumEnabled: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
 
-    val diceSum: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>()
+    val isRandomizingDice: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
     }
 
     val isPlayingDiceSong: MutableLiveData<Int> by lazy {
@@ -54,7 +54,14 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         LogManager.tests("refresh data")
 
         isDiceSumEnabled.postValue(mAppSettingsRepository.getIsDiceSumEnabled())
-        numberOfDice.postValue(mAppSettingsRepository.getNumberOfDice())
+
+        mAppSettingsRepository.getNumberOfDice().let {
+            if (it != numberOfDice.value || diceValues.value?.sum() != diceSum.value) {
+                numberOfDice.postValue(it)
+                diceValues.postValue(Array(it) { 1 }.toList())
+                diceSum.postValue(it)
+            }
+        }
 
         mAppSettingsRepository.getNumberOfDice().let {
             numberOfDice.postValue(it)

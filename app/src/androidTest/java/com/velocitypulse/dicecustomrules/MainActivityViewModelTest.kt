@@ -38,7 +38,6 @@ class MainActivityViewModelTest : TestCase() {
         runBlocking {
             mViewModel.refreshData()
         }
-
     }
 
     @Test
