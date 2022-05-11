@@ -1,15 +1,15 @@
 package com.velocitypulse.dicecustomrules.models.repositories
 
 import android.content.Context
-import com.velocitypulse.dicecustomrules.models.AppSettingsDataBase
-import com.velocitypulse.dicecustomrules.models.entity.AppSettings
+import com.velocitypulse.dicecustomrules.models.SettingsProfileDataBase
+import com.velocitypulse.dicecustomrules.models.entity.SettingsProfile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.coroutines.coroutineContext
 
-class AppSettingsRepository(context: Context) {
+class SettingsProfileRepository(context: Context) {
 
-    private var db = AppSettingsDataBase.getInstance(context)?.appSettingsDao()!!
+    private var db = SettingsProfileDataBase.getInstance(context)?.settingsProfileDao()!!
 
     suspend fun getNumberOfDice(): Int {
         return getSettings().numberOfDice
@@ -35,16 +35,16 @@ class AppSettingsRepository(context: Context) {
         db.updateAppSettings(getSettings().apply { isDiceSumEnabled = enabled })
     }
 
-    suspend fun updateAppSettings(appSettings: AppSettings) {
-        db.updateAppSettings(appSettings)
+    suspend fun updateAppSettings(iSettingsProfile: SettingsProfile) {
+        db.updateAppSettings(iSettingsProfile)
     }
 
-    private suspend fun getSettings(): AppSettings {
-        val settingsList: List<AppSettings> = db.getAllAppSettings()
-        val settings: AppSettings
+    private suspend fun getSettings(): SettingsProfile {
+        val settingsList: List<SettingsProfile> = db.getAllAppSettings()
+        val settings: SettingsProfile
 
         if (settingsList.isEmpty()) {
-            settings = AppSettings()
+            settings = SettingsProfile()
             CoroutineScope(coroutineContext).launch {
                 db.insertAppSettings(settings)
             }

@@ -22,7 +22,10 @@ object PreferencesManager {
     @Deprecated("database impl")
     fun getDiceSumEnabled(iContext: Context): Boolean {
         val mSharedPreferences = iContext.getSharedPreferences(APP_ADDRESS, Context.MODE_PRIVATE)
-        return mSharedPreferences.getBoolean(PREFERENCE_ALPHA_NUM_SHOWING, DEFAULT_ALPHA_NUM_SHOWING)
+        return mSharedPreferences.getBoolean(
+            PREFERENCE_ALPHA_NUM_SHOWING,
+            DEFAULT_ALPHA_NUM_SHOWING
+        )
     }
 
     @Deprecated("database impl")

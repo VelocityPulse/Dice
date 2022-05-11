@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.velocitypulse.dicecustomrules.core.LogManager
-import com.velocitypulse.dicecustomrules.models.repositories.AppSettingsRepository
+import com.velocitypulse.dicecustomrules.models.repositories.SettingsProfileRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
@@ -23,7 +23,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     var mRandomizingTime = 500L
 
     private val mAppSettingsRepository by lazy {
-        AppSettingsRepository(getApplication())
+        SettingsProfileRepository(getApplication())
     }
 
     val numberOfDice: MutableLiveData<Int> by lazy {

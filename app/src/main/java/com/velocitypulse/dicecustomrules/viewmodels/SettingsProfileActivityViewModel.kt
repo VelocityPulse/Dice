@@ -4,17 +4,17 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.velocitypulse.dicecustomrules.models.repositories.AppSettingsRepository
+import com.velocitypulse.dicecustomrules.models.repositories.SettingsProfileRepository
 import kotlinx.coroutines.launch
 
-class SettingsActivityViewModel(application: Application) : AndroidViewModel(application) {
+class SettingsProfileActivityViewModel(application: Application) : AndroidViewModel(application) {
 
     private val TAG: String = "SETTINGS ACTIVITY VIEW MODEL"
 
     private var mIsSongEnabled: Boolean = true
 
     private val mAppSettingsRepository by lazy {
-        AppSettingsRepository(getApplication())
+        SettingsProfileRepository(getApplication())
     }
 
     val numberOfDice: MutableLiveData<Int> by lazy {

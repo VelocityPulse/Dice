@@ -2,9 +2,10 @@ package com.velocitypulse.dicecustomrules.views
 
 import android.content.Intent
 import android.media.MediaPlayer
-import android.os.Build
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
@@ -98,7 +99,8 @@ class MainActivity : AppCompatActivity() {
             DiceView(findViewById(R.id.dice_9)),
             DiceView(findViewById(R.id.dice_10)),
             DiceView(findViewById(R.id.dice_11)),
-            DiceView(findViewById(R.id.dice_12)))
+            DiceView(findViewById(R.id.dice_12))
+        )
 
         mPlayerDiceSong1 = MediaPlayer.create(this, R.raw.dice_song_1)
         mPlayerDiceSong2 = MediaPlayer.create(this, R.raw.dice_song_2)
