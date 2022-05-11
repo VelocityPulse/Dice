@@ -1,9 +1,11 @@
-package com.velocitypulse.dicecustomrules.repositories
+package com.velocitypulse.dicecustomrules.models
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.velocitypulse.dicecustomrules.models.dao.AppSettingsDao
+import com.velocitypulse.dicecustomrules.models.entity.AppSettings
 
 @Database(entities = [AppSettings::class], version = 1)
 abstract class AppSettingsDataBase : RoomDatabase() {

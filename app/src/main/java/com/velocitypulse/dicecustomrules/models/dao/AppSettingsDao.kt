@@ -1,6 +1,7 @@
-package com.velocitypulse.dicecustomrules.repositories
+package com.velocitypulse.dicecustomrules.models.dao
 
 import androidx.room.*
+import com.velocitypulse.dicecustomrules.models.entity.AppSettings
 
 @Dao
 interface AppSettingsDao {

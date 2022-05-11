@@ -1,6 +1,8 @@
-package com.velocitypulse.dicecustomrules.repositories
+package com.velocitypulse.dicecustomrules.models.repositories
 
 import android.content.Context
+import com.velocitypulse.dicecustomrules.models.AppSettingsDataBase
+import com.velocitypulse.dicecustomrules.models.entity.AppSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.coroutines.coroutineContext

@@ -1,4 +1,4 @@
-package com.velocitypulse.dicecustomrules.repositories
+package com.velocitypulse.dicecustomrules.models.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

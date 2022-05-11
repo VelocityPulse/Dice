@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.velocitypulse.dicecustomrules.repositories.AppSettingsRepository
+import com.velocitypulse.dicecustomrules.models.repositories.AppSettingsRepository
 import kotlinx.coroutines.launch
 
 class SettingsActivityViewModel(application: Application) : AndroidViewModel(application) {
