@@ -1,14 +1,13 @@
-package com.velocitypulse.dicecustomrules
+package com.velocitypulse.dicecustomrules.views
 
 import android.widget.TextView
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.velocitypulse.dicecustomrules.R
 import com.velocitypulse.dicecustomrules.core.LogManager
 import com.velocitypulse.dicecustomrules.models.repositories.SettingsProfileRepository
-import com.velocitypulse.dicecustomrules.views.DiceView
-import com.velocitypulse.dicecustomrules.views.MainActivity
 import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Before

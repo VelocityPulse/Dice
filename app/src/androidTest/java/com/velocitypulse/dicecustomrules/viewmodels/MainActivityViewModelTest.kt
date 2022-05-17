@@ -1,10 +1,10 @@
-package com.velocitypulse.dicecustomrules
+package com.velocitypulse.dicecustomrules.viewmodels
 
 import androidx.lifecycle.Observer
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.velocitypulse.dicecustomrules.AppTestCase
 import com.velocitypulse.dicecustomrules.core.LogManager
-import com.velocitypulse.dicecustomrules.viewmodels.MainActivityViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

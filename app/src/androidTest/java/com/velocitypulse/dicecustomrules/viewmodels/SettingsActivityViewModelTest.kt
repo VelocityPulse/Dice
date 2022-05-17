@@ -1,4 +1,4 @@
-package com.velocitypulse.dicecustomrules
+package com.velocitypulse.dicecustomrules.viewmodels
 
 import android.app.Instrumentation.ActivityMonitor
 import androidx.lifecycle.Lifecycle
@@ -7,16 +7,14 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import com.velocitypulse.dicecustomrules.AppTestCase
 import com.velocitypulse.dicecustomrules.core.LogManager
-import com.velocitypulse.dicecustomrules.viewmodels.SettingsActivityViewModel
 import com.velocitypulse.dicecustomrules.views.MainActivity
 import com.velocitypulse.dicecustomrules.views.SettingsActivity
 import kotlinx.coroutines.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.logging.Handler
-
 
 @RunWith(AndroidJUnit4::class)
 class SettingsActivityViewModelTest : AppTestCase() {
