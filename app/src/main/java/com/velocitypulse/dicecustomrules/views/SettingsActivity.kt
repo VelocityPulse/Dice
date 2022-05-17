@@ -1,11 +1,13 @@
 package com.velocitypulse.dicecustomrules.views
 
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -85,6 +87,19 @@ class SettingsActivity : AppCompatActivity() {
 
         fab = findViewById(R.id.settings_fab)
         fab.setOnClickListener { mViewModel.onClickAdd() }
+
+        setupFabMargin()
+    }
+
+    private fun setupFabMargin() {
+        val resources: Resources = resources
+        val resourceId: Int = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+        if (resourceId > 0) {
+            fab.layoutParams = (fab.layoutParams as ConstraintLayout.LayoutParams).apply {
+                val navBarSize = resources.getDimensionPixelSize(resourceId)
+                setMargins(0, 0, rightMargin, navBarSize + rightMargin)
+            }
+        }
     }
 
     private fun initObserver() {

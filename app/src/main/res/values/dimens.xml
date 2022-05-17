@@ -3,10 +3,11 @@
     <dimen name="switch_text_size">22sp</dimen>
     <dimen name="switch_vertical_padding">8dp</dimen>
 
-
     <dimen name="dice_background_size">120dp</dimen>
     <dimen name="dice_shape_size">130dp</dimen>
 
     <dimen name="dice_background_little_size">100dp</dimen>
     <dimen name="dice_shape_little_size">110dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
