@@ -47,7 +47,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
 
         mViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
-        lifecycleScope.launchWhenCreated { mViewModel.refreshData() }
 
         supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
 
@@ -76,8 +75,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(iItem: MenuItem): Boolean {
         when (iItem.itemId) {
             R.id.action_settings -> {
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
+                launchSettings()
             }
         }
 
@@ -154,7 +152,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun setDisplayedDices(numberOfDice: Int) {
+    private fun setDisplayedDices(numberOfDice: Int) {
         var lIndex: Int = -1
 
         while (++lIndex < numberOfDice) {
@@ -173,6 +171,11 @@ class MainActivity : AppCompatActivity() {
             mPlayerDiceSong1?.start()
         else if (id == 2)
             mPlayerDiceSong2?.start()
+    }
+
+    fun launchSettings() {
+        val intent = Intent(this, SettingsActivity::class.java)
+        startActivity(intent)
     }
 
     @Suppress("UNUSED_PARAMETER")

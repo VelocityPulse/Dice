@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.velocitypulse.dicecustomrules.core.LogManager
+import com.velocitypulse.dicecustomrules.models.entity.SettingsProfile
 import com.velocitypulse.dicecustomrules.models.repositories.SettingsProfileRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -18,9 +19,10 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
     private val mDiceListOfSeenFace: MutableList<IntArray> = ArrayList()
     private val mRandom: Random = Random()
-    private var mIsSongEnabled = true
 
-    var mRandomizingTime = 500L
+    private lateinit var mProfile: SettingsProfile
+
+    var randomizingTime = 500L
 
     private val mAppSettingsRepository by lazy {
         SettingsProfileRepository(getApplication())
@@ -53,26 +55,15 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     suspend fun refreshData() {
         LogManager.tests("refresh data")
 
-        isDiceSumEnabled.postValue(mAppSettingsRepository.getIsDiceSumEnabled())
+        mProfile = mAppSettingsRepository.getSelectedProfile()
 
-        mAppSettingsRepository.getNumberOfDice().let {
-            if (it != numberOfDice.value || diceValues.value?.sum() != diceSum.value) {
-                numberOfDice.postValue(it)
-                diceValues.postValue(Array(it) { 1 }.toList())
-                diceSum.postValue(it)
-            }
-        }
+        isDiceSumEnabled.postValue(mProfile.isDiceSumEnabled)
+        numberOfDice.postValue(mProfile.numberOfDice)
+        diceSum.postValue(mProfile.numberOfDice)
+        diceValues.postValue(Array(mProfile.numberOfDice) { 1 }.toList())
 
-        mAppSettingsRepository.getNumberOfDice().let {
-            numberOfDice.postValue(it)
-
-            mDiceListOfSeenFace.clear()
-
-            for (index in 1..12)
-                mDiceListOfSeenFace.add(IntArray(6))
-        }
-
-        mIsSongEnabled = mAppSettingsRepository.getIsSongEnabled()
+        for (index in 1..12)
+            mDiceListOfSeenFace.add(IntArray(6))
 
         LogManager.tests("refresh finished")
     }
@@ -90,7 +81,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
         viewModelScope.launch {
             isRandomizingDice.postValue(true)
-            delay(mRandomizingTime)
+            delay(randomizingTime)
 
             try {
                 val newDices = ArrayList<Int>(numberOfDice.value!!)
@@ -139,7 +130,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     }
 
     private fun playSong() {
-        if (mIsSongEnabled) {
+        if (mProfile.isSongEnabled) {
             if (mRandom.nextInt(2) == 0)
                 isPlayingDiceSong.postValue(1)
             else

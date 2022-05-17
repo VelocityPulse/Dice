@@ -5,7 +5,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.1.0'
@@ -24,4 +24,8 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ['-Dkotlinx.coroutines.debug=on']
 }

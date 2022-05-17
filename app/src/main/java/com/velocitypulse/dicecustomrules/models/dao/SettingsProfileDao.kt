@@ -7,17 +7,30 @@ import com.velocitypulse.dicecustomrules.models.entity.SettingsProfile
 interface SettingsProfileDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAppSettings(vararg iSettings: SettingsProfile)
+    suspend fun insertSettingsProfile(vararg iSettings: SettingsProfile): LongArray
 
     @Update
-    suspend fun updateAppSettings(iSettings: SettingsProfile)
+    suspend fun updateSettingsProfile(iSettings: SettingsProfile)
 
     @Delete
-    suspend fun deleteAppSettings(iSettings: SettingsProfile)
+    suspend fun deleteSettingsProfile(iSettings: SettingsProfile)
 
     @Query("DELETE FROM ${SettingsProfile.tableName}")
-    suspend fun deleteAllAppSettings()
+    suspend fun deleteAllSettingsProfile()
+
+    @Query("SELECT * FROM ${SettingsProfile.tableName} WHERE id = :id")
+    suspend fun getProfileById(id: Long): SettingsProfile?
 
     @Query("SELECT * FROM ${SettingsProfile.tableName}")
-    suspend fun getAllAppSettings(): List<SettingsProfile>
+    suspend fun getAllSettingsProfile(): List<SettingsProfile>
+
+    @Query("SELECT * FROM ${SettingsProfile.tableName} WHERE is_selected = 1")
+    suspend fun getSelectedProfile(): SettingsProfile?
+
+    @Query("SELECT COUNT(title) FROM ${SettingsProfile.tableName}")
+    suspend fun getTableSize(): Int
+
+    @Query("DELETE FROM ${SettingsProfile.tableName}")
+    suspend fun nukeTable()
+
 }

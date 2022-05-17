@@ -5,7 +5,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.velocitypulse.dicecustomrules.core.LogManager
 import com.velocitypulse.dicecustomrules.viewmodels.MainActivityViewModel
-import junit.framework.TestCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -16,7 +15,7 @@ import org.junit.runner.RunWith
 import javax.annotation.concurrent.GuardedBy
 
 @RunWith(AndroidJUnit4::class)
-class MainActivityViewModelTest : TestCase() {
+class MainActivityViewModelTest : AppTestCase() {
 
     private lateinit var mViewModel: MainActivityViewModel
 
@@ -43,7 +42,7 @@ class MainActivityViewModelTest : TestCase() {
     @Test
     fun checkSumEqualsDiceValues() {
         LogManager.tests("check sum equal dice values")
-        mViewModel.mRandomizingTime = 0
+        mViewModel.randomizingTime = 0
 
         var assertNumber = 0
         val checkIfValueAreEqual = fun(result: ClickResult): Boolean {
@@ -57,52 +56,48 @@ class MainActivityViewModelTest : TestCase() {
             return sum == result.mDiceSum
         }
 
-        runBlocking {
-            launch(Dispatchers.Main) {
-
-                val diceSumObserver = Observer<Int> {
-                    synchronized(this) {
-                        if (mCurrentClickResult == null)
-                            mCurrentClickResult = ClickResult(mDiceSum = it)
-                        else {
-                            mCurrentClickResult!!.mDiceSum = it
-                            assertEquals(true, checkIfValueAreEqual(mCurrentClickResult!!))
-                            mCurrentClickResult = null
-                        }
+        blockingRunOnMainThread {
+            val diceSumObserver = Observer<Int> {
+                synchronized(this) {
+                    if (mCurrentClickResult == null)
+                        mCurrentClickResult = ClickResult(mDiceSum = it)
+                    else {
+                        mCurrentClickResult!!.mDiceSum = it
+                        assertEquals(true, checkIfValueAreEqual(mCurrentClickResult!!))
+                        mCurrentClickResult = null
                     }
-                }.apply {
-                    mViewModel.diceSum.observeForever(this)
                 }
-
-                val diceValueObserver = Observer<List<Int>> {
-                    synchronized(this) {
-                        if (mCurrentClickResult == null)
-                            mCurrentClickResult = ClickResult(mDiceValues = it)
-                        else {
-                            mCurrentClickResult!!.mDiceValues = it
-                            assertEquals(true, checkIfValueAreEqual(mCurrentClickResult!!))
-                            mCurrentClickResult = null
-                        }
-                    }
-                }.apply {
-                    mViewModel.diceValues.observeForever(this)
-                }
-
-                for (numberOfDice in 1..12) {
-                    mViewModel.numberOfDice.postValue(numberOfDice)
-
-                    loopDiceClick(200, 15)
-                }
-                mViewModel.diceValues.removeObserver(diceValueObserver)
-                mViewModel.diceSum.removeObserver(diceSumObserver)
+            }.apply {
+                mViewModel.diceSum.observeForever(this)
             }
+
+            val diceValueObserver = Observer<List<Int>> {
+                synchronized(this) {
+                    if (mCurrentClickResult == null)
+                        mCurrentClickResult = ClickResult(mDiceValues = it)
+                    else {
+                        mCurrentClickResult!!.mDiceValues = it
+                        assertEquals(true, checkIfValueAreEqual(mCurrentClickResult!!))
+                        mCurrentClickResult = null
+                    }
+                }
+            }.apply {
+                mViewModel.diceValues.observeForever(this)
+            }
+
+            for (numberOfDice in 1..12) {
+                mViewModel.numberOfDice.postValue(numberOfDice)
+                loopDiceClick(5, 15)
+            }
+            mViewModel.diceValues.removeObserver(diceValueObserver)
+            mViewModel.diceSum.removeObserver(diceSumObserver)
         }
     }
 
     @Test
     fun checkRandomBounds() {
         LogManager.tests("check random bounds values")
-        mViewModel.mRandomizingTime = 0
+        mViewModel.randomizingTime = 0
 
         val checkBounds = fun(list: List<Int>): Boolean {
             for (item in list) {
@@ -134,10 +129,5 @@ class MainActivityViewModelTest : TestCase() {
             delay(delayMillis)
             mViewModel.onDiceClick()
         }
-    }
-
-    @Test
-    fun failingTest() {
-//        fail()
     }
 }

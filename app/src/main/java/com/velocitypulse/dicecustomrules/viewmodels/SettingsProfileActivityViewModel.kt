@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.velocitypulse.dicecustomrules.core.LogManager
+import com.velocitypulse.dicecustomrules.models.entity.SettingsProfile
 import com.velocitypulse.dicecustomrules.models.repositories.SettingsProfileRepository
 import kotlinx.coroutines.launch
 
@@ -13,8 +15,18 @@ class SettingsProfileActivityViewModel(application: Application) : AndroidViewMo
 
     private var mIsSongEnabled: Boolean = true
 
-    private val mAppSettingsRepository by lazy {
+    private lateinit var mProfile: SettingsProfile
+
+    private val mSettingsProfileRepository by lazy {
         SettingsProfileRepository(getApplication())
+    }
+
+    val finishActivity: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
+    val title: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
     }
 
     val numberOfDice: MutableLiveData<Int> by lazy {
@@ -29,34 +41,52 @@ class SettingsProfileActivityViewModel(application: Application) : AndroidViewMo
         MutableLiveData<Boolean>()
     }
 
-    init {
+    suspend fun refreshData(id: Long) {
+        LogManager.tests("refresh data")
+        mProfile = mSettingsProfileRepository.getProfileById(id)!!
+
+        numberOfDice.postValue(mProfile.numberOfDice)
+        isDiceSumEnabled.postValue(mProfile.isDiceSumEnabled)
+        isSongEnabled.postValue(mProfile.isSongEnabled)
+        title.postValue(mProfile.title)
+    }
+
+    fun setTitle(newTitle: String) {
         viewModelScope.launch {
-            with(mAppSettingsRepository) {
-                numberOfDice.postValue(getNumberOfDice())
-                isDiceSumEnabled.postValue(getIsDiceSumEnabled())
-                isSongEnabled.postValue(getIsSongEnabled())
-            }
+            mProfile.title = newTitle
+            mSettingsProfileRepository.updateProfile(mProfile)
+            // Title not updated because it creates infinite loop. Observable useful only for init
         }
     }
 
     fun setNumberOfDice(num: Int) {
         viewModelScope.launch {
-            mAppSettingsRepository.setNumberOfDice(num)
+            mProfile.numberOfDice = num
+            mSettingsProfileRepository.updateProfile(mProfile)
             numberOfDice.postValue(num)
         }
     }
 
     fun setIsDiceSumEnabled(enabled: Boolean) {
         viewModelScope.launch {
-            mAppSettingsRepository.setIsDiceSumEnabled(enabled)
+            mProfile.isDiceSumEnabled = enabled
+            mSettingsProfileRepository.updateProfile(mProfile)
             isDiceSumEnabled.postValue(enabled)
         }
     }
 
     fun setIsSongEnabled(enabled: Boolean) {
         viewModelScope.launch {
-            mAppSettingsRepository.setIsSongEnabled(enabled)
+            mProfile.isSongEnabled = enabled
+            mSettingsProfileRepository.updateProfile(mProfile)
             isSongEnabled.postValue(enabled)
+        }
+    }
+
+    fun deleteProfile() {
+        viewModelScope.launch {
+            mSettingsProfileRepository.deleteProfile(mProfile)
+            finishActivity.postValue(true)
         }
     }
 }

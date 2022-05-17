@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">@color/colorBackground1</color>
-    <color name="colorPrimaryDark">@color/colorBackground2</color>
+    <color name="colorPrimaryLight">#f48fb1</color>
+    <color name="colorPrimaryDark">#880e4f</color>
+
     <color name="colorAccent">@color/colorDiceCircle</color>
 
     <color name="colorDarkSetting">#424242</color>
 
-    <color name="colorBackground1">#DE4DAA</color>
+    <color name="colorBackground1">#FFEC407A</color>
     <color name="colorBackground2">#F6D327</color>
 
     <color name="colorDiceCircle">#EC0050</color>
