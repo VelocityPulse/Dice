@@ -37,11 +37,13 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:alpha="0.7"
-            android:background="@drawable/ic_pencil"
-            android:backgroundTint="@color/colorPrimaryDark"
+            android:foreground="@drawable/ic_pencil"
+            android:foregroundTint="@color/colorPrimaryDark"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="Edit profile" />
         <!--        TODO check clicking area of image button (and if we can make it round)-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>

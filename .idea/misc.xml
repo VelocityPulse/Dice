@@ -3,15 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/drawable/arrow_back.xml" value="0.209" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/drawable/ic_add.xml" value="0.217" />
+        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/drawable/ic_delete.xml" value="0.209" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/drawable/ic_pencil.xml" value="0.3615" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/action_bar_settings.xml" value="0.19722222222222222" />
-        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/action_bar_template.xml" value="0.42857142857142855" />
+        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/action_bar_template.xml" value="0.5714285714285714" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/dice.xml" value="0.42857142857142855" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/main_activity.xml" value="0.3828571428571429" />
-        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/profile_item.xml" value="0.5142857142857143" />
+        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/profile_item.xml" value="0.3828571428571429" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/profile_item_removing.xml" value="0.1" />
-        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/settings_activity.xml" value="0.42916666666666664" />
+        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/settings_activity.xml" value="0.10285714285714286" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/settings_profile_activity.xml" value="0.42916666666666664" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/menu/main_menu.xml" value="0.42916666666666664" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/menu/profile_menu.xml" value="0.42916666666666664" />
@@ -23,5 +25,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.10285714285714286" />
+      </ProjectState>
+    </option>
   </component>
 </project>

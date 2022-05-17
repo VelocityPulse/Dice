@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageButton
 import android.widget.NumberPicker
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
@@ -38,9 +39,9 @@ class SettingsProfileActivity : AppCompatActivity() {
 
         supportActionBar?.let {
             it.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-            it.setDisplayHomeAsUpEnabled(true)
             it.setCustomView(R.layout.action_bar_template)
             it.customView.findViewById<TextView>(R.id.action_bar_title).text = "Settings"
+            it.customView.findViewById<ImageButton>(R.id.home_button).setOnClickListener { finish() }
         }
 
         initView()
