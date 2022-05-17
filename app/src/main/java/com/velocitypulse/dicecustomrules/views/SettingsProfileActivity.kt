@@ -6,17 +6,17 @@ import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageButton
+import android.view.View.OnFocusChangeListener
 import android.widget.NumberPicker
-import android.widget.TextView
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.velocitypulse.dicecustomrules.R
+import com.velocitypulse.dicecustomrules.core.Utils.hideKeyboard
 import com.velocitypulse.dicecustomrules.viewmodels.SettingsProfileActivityViewModel
 import kotlinx.coroutines.launch
 
@@ -30,6 +30,7 @@ class SettingsProfileActivity : AppCompatActivity() {
     private lateinit var mDiceSumSwitch: SwitchCompat
     private lateinit var mDiceNumberPicker: NumberPicker
     private lateinit var mTitleEditText: TextInputEditText
+    private lateinit var mTitleInputLayout: TextInputLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +81,7 @@ class SettingsProfileActivity : AppCompatActivity() {
         mDiceSumSwitch = findViewById(R.id.dice_sum_switch)
         mSongSwitch = findViewById(R.id.song_switch)
         mTitleEditText = findViewById(R.id.title_input)
+        mTitleInputLayout = findViewById(R.id.title_filed)
 
         mDiceNumberPicker.setOnValueChangedListener { _, _, newVal ->
             mViewModel.setNumberOfDice(newVal)
@@ -94,6 +96,10 @@ class SettingsProfileActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {}
         })
+        mTitleEditText.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus)
+                hideKeyboard(v)
+        }
     }
 
     private fun initObservers() {

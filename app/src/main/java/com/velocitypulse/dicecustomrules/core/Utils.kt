@@ -1,12 +1,16 @@
 package com.velocitypulse.dicecustomrules.core
 
+import android.app.Activity
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.Px
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.marginBottom
 import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
 import androidx.core.view.marginTop
+
 
 object Utils {
 
@@ -30,4 +34,9 @@ object Utils {
         }
     }
 
+    fun AppCompatActivity.hideKeyboard(view: View) {
+        val inputMethodManager: InputMethodManager? =
+            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+        inputMethodManager?.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 }
