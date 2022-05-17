@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_settings"
-        android:iconTint="@android:color/white"
+        app:iconTint="@color/toolbarColor"
         android:orderInCategory="0"
         android:title="settings"
         app:showAsAction="always" />

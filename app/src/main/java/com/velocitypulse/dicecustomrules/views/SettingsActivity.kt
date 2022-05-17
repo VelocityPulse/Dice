@@ -4,9 +4,6 @@ import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.ImageButton
-import android.widget.TextView
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
@@ -36,12 +33,10 @@ class SettingsActivity : AppCompatActivity() {
 
         mViewModel = ViewModelProvider(this).get(SettingsActivityViewModel::class.java)
 
-        supportActionBar?.let {
-            it.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-            it.setCustomView(R.layout.action_bar_template)
-            it.customView.findViewById<TextView>(R.id.action_bar_title).text = "Profiles"
-            it.customView.findViewById<ImageButton>(R.id.home_button).setOnClickListener { finish() }
-        }
+        setSupportActionBar(findViewById(R.id.toolbar))
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         initView()
         initObserver()
@@ -55,7 +50,7 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(iItem: MenuItem): Boolean {
         when (iItem.itemId) {
-            R.id.home_button -> finish()
+            android.R.id.home -> finish()
         }
         return super.onOptionsItemSelected(iItem)
     }

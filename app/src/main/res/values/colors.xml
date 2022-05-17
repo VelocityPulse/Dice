@@ -14,6 +14,6 @@
     <color name="colorDiceCircle">#EC0050</color>
     <color name="colorDice">#EBEBEB</color>
 
-    <color name="menuColor">@android:color/white</color>
+    <color name="toolbarColor">@android:color/white</color>
 
 </resources>

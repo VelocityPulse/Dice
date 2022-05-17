@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="toolbar_title_size">24sp</dimen>
+
     <dimen name="switch_text_size">22sp</dimen>
     <dimen name="switch_vertical_padding">8dp</dimen>
 

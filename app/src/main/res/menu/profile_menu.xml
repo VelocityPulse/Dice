@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_delete"
         android:icon="@drawable/ic_delete"
-        android:iconTint="@color/menuColor"
+        app:iconTint="@color/toolbarColor"
         android:orderInCategory="0"
         android:title="delete"
         app:showAsAction="always" />

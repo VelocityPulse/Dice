@@ -37,12 +37,10 @@ class SettingsProfileActivity : AppCompatActivity() {
 
         mViewModel = ViewModelProvider(this).get(SettingsProfileActivityViewModel::class.java)
 
-        supportActionBar?.let {
-            it.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-            it.setCustomView(R.layout.action_bar_template)
-            it.customView.findViewById<TextView>(R.id.action_bar_title).text = "Settings"
-            it.customView.findViewById<ImageButton>(R.id.home_button).setOnClickListener { finish() }
-        }
+        setSupportActionBar(findViewById(R.id.toolbar))
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         initView()
         initObservers()
