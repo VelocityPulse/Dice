@@ -43,7 +43,10 @@ class SettingsProfileActivityViewModel(application: Application) : AndroidViewMo
 
     suspend fun refreshData(id: Long) {
         LogManager.tests("refresh data")
-        mProfile = mSettingsProfileRepository.getProfileById(id)!!
+
+        mSettingsProfileRepository.getProfileById(id).also {
+            mProfile = it ?: mSettingsProfileRepository.getNewProfile()
+        }
 
         numberOfDice.postValue(mProfile.numberOfDice)
         isDiceSumEnabled.postValue(mProfile.isDiceSumEnabled)

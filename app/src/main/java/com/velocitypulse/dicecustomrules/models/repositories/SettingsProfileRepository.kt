@@ -56,7 +56,7 @@ class SettingsProfileRepository(context: Context) {
         return getFirstOrNewSettings().also { it.isSelected = true }
     }
 
-    suspend fun getNewSettings(): SettingsProfile {
+    suspend fun getNewProfile(): SettingsProfile {
         return SettingsProfile().also {
             it.isSelected = db.getTableSize() == 0
             it.id = db.insertSettingsProfile(it)[0]

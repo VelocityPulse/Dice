@@ -8,7 +8,6 @@ import com.velocitypulse.dicecustomrules.core.LogManager
 import com.velocitypulse.dicecustomrules.models.entity.SettingsProfile
 import com.velocitypulse.dicecustomrules.models.repositories.SettingsProfileRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.jetbrains.annotations.TestOnly
 
 class SettingsActivityViewModel(application: Application) : AndroidViewModel(application) {
@@ -50,7 +49,7 @@ class SettingsActivityViewModel(application: Application) : AndroidViewModel(app
     fun onClickAdd() {
         viewModelScope.launch {
             LogManager.tests(TAG, "click add")
-            val newProfile = mSettingsProfileRepository.getNewSettings()
+            val newProfile = mSettingsProfileRepository.getNewProfile()
             profileList.value?.let {
                 it.add(newProfile)
                 insertedProfile.postValue(newProfile)

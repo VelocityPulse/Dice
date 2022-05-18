@@ -29,8 +29,6 @@ class MainActivityTest : TestCase() {
     fun checkDiceAndSumAreEquals() {
         val activityScenario = launch(MainActivity::class.java)
 
-        activityScenario.moveToState(Lifecycle.State.CREATED)
-
         for (i in 1..12) {
 
             activityScenario.onActivity {
