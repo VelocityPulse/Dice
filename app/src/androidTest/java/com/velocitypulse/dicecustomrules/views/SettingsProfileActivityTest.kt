@@ -38,8 +38,6 @@ class SettingsProfileActivityTest : TestCase() {
         }
         assertEquals(false, titleEditText.isFocused)
 
-
-
         onView(withId(R.id.title_filed)).perform(click())
         assertEquals(true, titleEditText.isFocused)
         onView(withId(R.id.form_layout)).perform(click())
@@ -47,11 +45,6 @@ class SettingsProfileActivityTest : TestCase() {
 
         // Additional tests
         run {
-            onView(withId(R.id.title_filed)).perform(click())
-            assertEquals(true, titleEditText.isFocused)
-            onView(withId(R.id.song_switch)).perform(click())
-            assertEquals(false, titleEditText.isFocused)
-
             onView(withId(R.id.title_filed)).perform(click())
             assertEquals(true, titleEditText.isFocused)
             onView(withId(R.id.number_of_dice_layout)).perform(click())
