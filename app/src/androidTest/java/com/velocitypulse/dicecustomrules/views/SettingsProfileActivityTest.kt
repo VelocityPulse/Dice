@@ -37,7 +37,6 @@ class SettingsProfileActivityTest : TestCase() {
 
         }
         assertEquals(false, titleEditText.isFocused)
-
         onView(withId(R.id.title_filed)).perform(click())
         assertEquals(true, titleEditText.isFocused)
         onView(withId(R.id.form_layout)).perform(click())
