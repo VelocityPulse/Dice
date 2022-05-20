@@ -12,7 +12,7 @@ import com.velocitypulse.dicecustomrules.models.entity.SettingsProfile
 
 @Database(
     entities = [SettingsProfile::class],
-    version = 2,
+    version = 3,
 )
 abstract class SettingsProfileDataBase : RoomDatabase() {
 
@@ -37,6 +37,7 @@ abstract class SettingsProfileDataBase : RoomDatabase() {
             ).apply {
                 try {
                     fallbackToDestructiveMigrationFrom(1)
+                    addMigrations(MIGRATION_2_3)
                     INSTANCE = build()
                 } catch (th: Throwable) {
                     LogManager.error(TAG, th.stackTraceToString())
@@ -45,10 +46,13 @@ abstract class SettingsProfileDataBase : RoomDatabase() {
             return INSTANCE
         }
 
-        val MIGRATION_1_x = object : Migration(1, 2) {
+        val MIGRATION_2_3 = object : Migration(2, 3) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 try {
-                    db.execSQL("DELETE FROM ${SettingsProfile.tableName_V1}")
+                    db.execSQL("ALTER TABLE ${SettingsProfile.tableName}" +
+                            " ADD COLUMN text_definition_enabled INTEGER DEFAULT 0 not null")
+                    db.execSQL("ALTER TABLE ${SettingsProfile.tableName}" +
+                            " ADD COLUMN map_definition TEXT DEFAULT '' not null")
                 } catch (th: Throwable) {
                     LogManager.error(TAG, th.stackTraceToString())
                 }
