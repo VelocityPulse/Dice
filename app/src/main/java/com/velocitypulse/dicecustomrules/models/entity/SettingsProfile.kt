@@ -12,6 +12,8 @@ data class SettingsProfile(
     @ColumnInfo(name = "dice_sum_enabled") var isDiceSumEnabled: Boolean = false,
     @ColumnInfo(name = "song_enabled") var isSongEnabled: Boolean = true,
     @ColumnInfo(name = "number_of_dice") var numberOfDice: Int = 1,
+    @ColumnInfo(name = "text_definition_enabled") var isTextDefinitionEnabled: Boolean = false,
+    @ColumnInfo(name = "map_definition") var mapDefinition: String = ""
 ) {
     companion object {
         const val tableName_V1 = "app_settings_table"
