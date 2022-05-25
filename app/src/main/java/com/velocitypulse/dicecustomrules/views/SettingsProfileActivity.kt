@@ -5,17 +5,22 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnFocusChangeListener
+import android.view.View.*
 import android.widget.NumberPicker
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.velocitypulse.dicecustomrules.R
+import com.velocitypulse.dicecustomrules.adapters.DiceDescriptionAdapter
+import com.velocitypulse.dicecustomrules.core.LogManager
 import com.velocitypulse.dicecustomrules.core.Utils.hideKeyboard
 import com.velocitypulse.dicecustomrules.viewmodels.SettingsProfileActivityViewModel
 import kotlinx.coroutines.launch
@@ -31,6 +36,11 @@ class SettingsProfileActivity : AppCompatActivity() {
     private lateinit var mDiceNumberPicker: NumberPicker
     private lateinit var mTitleEditText: TextInputEditText
     private lateinit var mTitleInputLayout: TextInputLayout
+    private lateinit var mDiceDescriptionSwitch: SwitchCompat
+    private lateinit var mDiceDescriptionNumberPicker: NumberPicker
+    private lateinit var mDescriptionRecyclerView: RecyclerView
+
+    private lateinit var mAdapter: DiceDescriptionAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +53,7 @@ class SettingsProfileActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
+        findView()
         initView()
         initObservers()
     }
@@ -51,16 +62,6 @@ class SettingsProfileActivity : AppCompatActivity() {
         super.onResume()
 
         lifecycleScope.launch { mViewModel.refreshData(intent.getLongExtra("PROFILE_ID", 0L)) }
-
-        mDiceNumberPicker.let {
-            it.minValue = 1
-            it.maxValue = 12
-        }
-
-        mViewModel.numberOfDice.value?.let { mDiceNumberPicker.value = it }
-        mViewModel.isDiceSumEnabled.value?.let { mDiceSumSwitch.isChecked = it }
-        mViewModel.isSongEnabled.value?.let { mSongSwitch.isChecked = it }
-        mViewModel.title.value?.let { mTitleEditText.setText(it) }
     }
 
     override fun onCreateOptionsMenu(iMenu: Menu?): Boolean {
@@ -76,15 +77,25 @@ class SettingsProfileActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(iItem)
     }
 
-    fun initView() {
+    fun findView() {
         mDiceNumberPicker = findViewById(R.id.dice_number_picker)
         mDiceSumSwitch = findViewById(R.id.dice_sum_switch)
         mSongSwitch = findViewById(R.id.song_switch)
         mTitleEditText = findViewById(R.id.title_input)
         mTitleInputLayout = findViewById(R.id.title_filed)
+        mDiceDescriptionSwitch = findViewById(R.id.description_enable)
+        mDiceDescriptionNumberPicker = findViewById(R.id.description_dice_value)
+        mDescriptionRecyclerView = findViewById(R.id.description_recycler_view)
+    }
 
+    fun initView() {
         mDiceNumberPicker.setOnValueChangedListener { _, _, newVal ->
             mViewModel.setNumberOfDice(newVal)
+        }
+
+        mDiceNumberPicker.apply {
+            minValue = 1
+            maxValue = 12
         }
 
         mTitleEditText.addTextChangedListener(object : TextWatcher {
@@ -100,6 +111,55 @@ class SettingsProfileActivity : AppCompatActivity() {
             if (!hasFocus)
                 hideKeyboard(v)
         }
+
+        mDescriptionRecyclerView.layoutManager = LinearLayoutManager(this)
+        DiceDescriptionAdapter(
+            this,
+            mDescriptionRecyclerView,
+            mutableMapOf(),
+            0,
+            onDescriptionTextEdit
+        ).also {
+            mDescriptionRecyclerView.adapter = it
+            mAdapter = it
+        }
+
+//        mDiceDescriptionNumberPicker.onNestedScroll()
+
+
+//        mDiceDescriptionNumberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
+//            mAdapter.scrollToPosition(oldVal, newVal)
+//        }
+
+        var lastEventY = 0f
+        var isUp = true
+        mDiceDescriptionNumberPicker.setOnTouchListener(fun(v: View, event: MotionEvent): Boolean {
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                lastEventY = event.y
+                isUp = false
+            }
+            else if (event.action == MotionEvent.ACTION_MOVE) {
+                mDescriptionRecyclerView.scrollBy(0, (lastEventY - event.y).toInt())
+                lastEventY = event.y
+            }
+            else if (event.action == MotionEvent.ACTION_UP)
+                isUp = true
+                LogManager.debug(TAG, "recycler y : ${mDescriptionRecyclerView.scrollY}")
+
+            return false
+        })
+
+
+        mDiceDescriptionNumberPicker.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (isUp)
+                mDescriptionRecyclerView.scrollBy(oldScrollX - scrollX, oldScrollY - scrollY)
+//            mDescriptionRecyclerView.scrollBy(0, (lastEventY - event.y).toInt())
+//            mDescriptionRecyclerView.scrollBy(0, )
+        }
+    }
+
+    val onDescriptionTextEdit = DiceDescriptionAdapter.OnTextEditListener { description, position ->
+        mViewModel.onDescriptionEdit(description, position)
     }
 
     private fun initObservers() {
@@ -108,6 +168,30 @@ class SettingsProfileActivity : AppCompatActivity() {
         mViewModel.isSongEnabled.observe(this) { enabled -> mSongSwitch.isChecked = enabled }
         mViewModel.title.observe(this) { title -> mTitleEditText.setText(title) }
         mViewModel.finishActivity.observe(this) { if (it) finish() }
+
+        mViewModel.descriptionMap.observe(this) { setDescriptionMap(it) }
+        mViewModel.diceDescriptionPickerSize.observe(this) { setDiceDescriptionPickerSize(it) }
+        mViewModel.diceDescriptionEnabled.observe(this) { setDiceDescriptionEnabled(it) }
+    }
+
+    private fun setDescriptionMap(it: MutableMap<Int, String>) {
+        mAdapter.descriptionMap = it
+        mAdapter.notifyDataSetChangedInfiniteLoop()
+    }
+
+    private fun setDiceDescriptionEnabled(it: Boolean) {
+        mDiceDescriptionSwitch.isChecked = it
+        mDiceDescriptionNumberPicker.visibility = if (it) VISIBLE else GONE
+        mDescriptionRecyclerView.visibility = if (it) VISIBLE else GONE
+    }
+
+    private fun setDiceDescriptionPickerSize(it: Int) {
+        mAdapter.listSize = it
+        mAdapter.notifyDataSetChangedInfiniteLoop()
+        mDiceDescriptionNumberPicker.apply {
+            minValue = 1
+            maxValue = it
+        }
     }
 
     fun onDiceSumSwitchClick(view: View) {
@@ -118,10 +202,13 @@ class SettingsProfileActivity : AppCompatActivity() {
         mViewModel.setIsSongEnabled((view as SwitchCompat).isChecked)
     }
 
+    fun onDescriptionSwitchClick(view: View) {
+        mViewModel.setIsDiceDescriptionEnabled((view as SwitchCompat).isChecked)
+    }
+
     fun delete() {
 
         val builder = AlertDialog.Builder(this)
-//        builder.setTitle("Androidly Alert")
         builder.setMessage("Delete profile?")
 
         builder.setPositiveButton(android.R.string.yes) { dialog, which ->

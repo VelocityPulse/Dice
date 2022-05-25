@@ -36,7 +36,7 @@ class SettingsActivityViewModelTest : AppTestCase() {
 
             Thread.sleep(200)
             activityScenario.onActivity {
-                assertEquals(1, it.adapter.settingsProfileList.size)
+                assertEquals(1, it.mAdapter.settingsProfileList.size)
             }
 
             activityScenario.moveToState(Lifecycle.State.DESTROYED)
@@ -63,7 +63,7 @@ class SettingsActivityViewModelTest : AppTestCase() {
             ) as SettingsActivity
 
         Thread.sleep(100)
-        assertEquals(1, nextActivity.adapter.settingsProfileList.size)
+        assertEquals(1, nextActivity.mAdapter.settingsProfileList.size)
     }
 
     @Test
@@ -75,7 +75,7 @@ class SettingsActivityViewModelTest : AppTestCase() {
             assertEquals(true, it.mViewModel.selectedProfile.value!!.isSelected)
 
             // Should be in SettingsActivityTest.kt
-            assertEquals(true, it.adapter.settingsProfileList[0].isSelected)
+            assertEquals(true, it.mAdapter.settingsProfileList[0].isSelected)
         }
 
         activityScenario.moveToState(Lifecycle.State.DESTROYED)
@@ -148,8 +148,8 @@ class SettingsActivityViewModelTest : AppTestCase() {
 
         Thread.sleep(100)
         activityScenario.onActivity {
-            it.mViewModel.onItemClicked(it.adapter.settingsProfileList[4])
-            it.mViewModel.onItemClicked(it.adapter.settingsProfileList[6])
+            it.mViewModel.onItemClicked(it.mAdapter.settingsProfileList[4])
+            it.mViewModel.onItemClicked(it.mAdapter.settingsProfileList[6])
         }
 
         Thread.sleep(100)
@@ -211,8 +211,8 @@ class SettingsActivityViewModelTest : AppTestCase() {
         clearDataBase()
         return ActivityScenario.launch(SettingsActivity::class.java)
     }
-}
 
-private operator fun Int.plus(v: Boolean): Int {
-    return this + if (v) 1 else 0
+    private operator fun Int.plus(v: Boolean): Int {
+        return this + if (v) 1 else 0
+    }
 }

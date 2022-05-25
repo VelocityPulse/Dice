@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background">
@@ -125,6 +126,41 @@
                 app:layout_constraintRight_toRightOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/description_enable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onDescriptionSwitchClick"
+            android:paddingTop="@dimen/switch_vertical_padding"
+            android:paddingBottom="@dimen/switch_vertical_padding"
+            android:text="Show dice description"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/switch_text_size"
+            app:layout_constraintTop_toBottomOf="@id/number_of_dice_layout" />
+
+        <NumberPicker
+            android:id="@+id/description_dice_value"
+            android:layout_width="80dp"
+            android:layout_height="130dp"
+            android:theme="@android:style/Theme.Material"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description_enable" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/description_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fadingEdgeLength="10dp"
+            android:nestedScrollingEnabled="false"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp"
+            android:requiresFadingEdge="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/description_dice_value"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/description_dice_value"
+            app:layout_constraintTop_toTopOf="@id/description_dice_value"
+            tools:listitem="@layout/dice_description_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

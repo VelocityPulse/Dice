@@ -22,10 +22,10 @@ class SettingsActivity : AppCompatActivity() {
     private val TAG = "SETTINGS ACTIVITY"
 
     lateinit var mViewModel: SettingsActivityViewModel
-    lateinit var adapter: SettingsAdapter
-    lateinit var recycler: RecyclerView
+    lateinit var mAdapter: SettingsAdapter
+    lateinit var mRecycler: RecyclerView
 
-    private lateinit var fab: FloatingActionButton
+    private lateinit var mFab: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,19 +70,19 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        recycler = findViewById(R.id.settings_recycler_view)
-        recycler.layoutManager = LinearLayoutManager(this)
+        mRecycler = findViewById(R.id.settings_recycler_view)
+        mRecycler.layoutManager = LinearLayoutManager(this)
 
         SettingsAdapter(
             this, mutableListOf(),
             onCardViewClick, onCardViewLongClick, onEditButtonClick
         ).also {
-            recycler.adapter = it
-            adapter = it
+            mRecycler.adapter = it
+            mAdapter = it
         }
 
-        fab = findViewById(R.id.settings_fab)
-        fab.setOnClickListener { mViewModel.onClickAdd() }
+        mFab = findViewById(R.id.settings_fab)
+        mFab.setOnClickListener { mViewModel.onClickAdd() }
 
         setupFabMargin()
     }
@@ -91,7 +91,7 @@ class SettingsActivity : AppCompatActivity() {
         val resources: Resources = resources
         val resourceId: Int = resources.getIdentifier("navigation_bar_height", "dimen", "android")
         if (resourceId > 0) {
-            fab.layoutParams = (fab.layoutParams as ConstraintLayout.LayoutParams).apply {
+            mFab.layoutParams = (mFab.layoutParams as ConstraintLayout.LayoutParams).apply {
                 val navBarSize = resources.getDimensionPixelSize(resourceId)
                 setMargins(0, 0, rightMargin, navBarSize + rightMargin)
             }
@@ -99,9 +99,9 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun initObserver() {
-        mViewModel.profileList.observe(this) { adapter.setProfileList(it) }
-        mViewModel.updatedProfile.observe(this) { adapter.notifyItemChanged(it) }
-        mViewModel.selectedProfile.observe(this) { adapter.notifyItemChanged(it) }
-        mViewModel.insertedProfile.observe(this) { adapter.notifyItemInserted(it) }
+        mViewModel.profileList.observe(this) { mAdapter.setProfileList(it) }
+        mViewModel.updatedProfile.observe(this) { mAdapter.notifyItemChanged(it) }
+        mViewModel.selectedProfile.observe(this) { mAdapter.notifyItemChanged(it) }
+        mViewModel.insertedProfile.observe(this) { mAdapter.notifyItemInserted(it) }
     }
 }
