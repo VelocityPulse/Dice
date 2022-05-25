@@ -5,7 +5,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
 import android.view.View.*
 import android.widget.NumberPicker
@@ -20,7 +19,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.velocitypulse.dicecustomrules.R
 import com.velocitypulse.dicecustomrules.adapters.DiceDescriptionAdapter
-import com.velocitypulse.dicecustomrules.core.LogManager
 import com.velocitypulse.dicecustomrules.core.Utils.hideKeyboard
 import com.velocitypulse.dicecustomrules.viewmodels.SettingsProfileActivityViewModel
 import kotlinx.coroutines.launch
@@ -37,14 +35,14 @@ class SettingsProfileActivity : AppCompatActivity() {
     private lateinit var mTitleEditText: TextInputEditText
     private lateinit var mTitleInputLayout: TextInputLayout
     private lateinit var mDiceDescriptionSwitch: SwitchCompat
-    private lateinit var mDiceDescriptionNumberPicker: NumberPicker
+//    private lateinit var mDiceDescriptionNumberPicker: NumberPicker
     private lateinit var mDescriptionRecyclerView: RecyclerView
 
     private lateinit var mAdapter: DiceDescriptionAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.settings_profile_activity)
+        setContentView(R.layout.activity_settings_profile)
 
         mViewModel = ViewModelProvider(this).get(SettingsProfileActivityViewModel::class.java)
 
@@ -84,7 +82,7 @@ class SettingsProfileActivity : AppCompatActivity() {
         mTitleEditText = findViewById(R.id.title_input)
         mTitleInputLayout = findViewById(R.id.title_filed)
         mDiceDescriptionSwitch = findViewById(R.id.description_enable)
-        mDiceDescriptionNumberPicker = findViewById(R.id.description_dice_value)
+//        mDiceDescriptionNumberPicker = findViewById(R.id.description_dice_value)
         mDescriptionRecyclerView = findViewById(R.id.description_recycler_view)
     }
 
@@ -113,6 +111,7 @@ class SettingsProfileActivity : AppCompatActivity() {
         }
 
         mDescriptionRecyclerView.layoutManager = LinearLayoutManager(this)
+
         DiceDescriptionAdapter(
             this,
             mDescriptionRecyclerView,
@@ -133,29 +132,29 @@ class SettingsProfileActivity : AppCompatActivity() {
 
         var lastEventY = 0f
         var isUp = true
-        mDiceDescriptionNumberPicker.setOnTouchListener(fun(v: View, event: MotionEvent): Boolean {
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                lastEventY = event.y
-                isUp = false
-            }
-            else if (event.action == MotionEvent.ACTION_MOVE) {
-                mDescriptionRecyclerView.scrollBy(0, (lastEventY - event.y).toInt())
-                lastEventY = event.y
-            }
-            else if (event.action == MotionEvent.ACTION_UP)
-                isUp = true
-                LogManager.debug(TAG, "recycler y : ${mDescriptionRecyclerView.scrollY}")
+//        mDiceDescriptionNumberPicker.setOnTouchListener(fun(v: View, event: MotionEvent): Boolean {
+//            if (event.action == MotionEvent.ACTION_DOWN) {
+//                lastEventY = event.y
+//                isUp = false
+//            }
+//            else if (event.action == MotionEvent.ACTION_MOVE) {
+//                mDescriptionRecyclerView.scrollBy(0, (lastEventY - event.y).toInt())
+//                lastEventY = event.y
+//            }
+//            else if (event.action == MotionEvent.ACTION_UP)
+//                isUp = true
+//                LogManager.debug(TAG, "recycler y : ${mDescriptionRecyclerView.scrollY}")
+//
+//            return false
+//        })
 
-            return false
-        })
 
-
-        mDiceDescriptionNumberPicker.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            if (isUp)
-                mDescriptionRecyclerView.scrollBy(oldScrollX - scrollX, oldScrollY - scrollY)
-//            mDescriptionRecyclerView.scrollBy(0, (lastEventY - event.y).toInt())
-//            mDescriptionRecyclerView.scrollBy(0, )
-        }
+//        mDiceDescriptionNumberPicker.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+//            if (isUp)
+//                mDescriptionRecyclerView.scrollBy(oldScrollX - scrollX, oldScrollY - scrollY)
+////            mDescriptionRecyclerView.scrollBy(0, (lastEventY - event.y).toInt())
+////            mDescriptionRecyclerView.scrollBy(0, )
+//        }
     }
 
     val onDescriptionTextEdit = DiceDescriptionAdapter.OnTextEditListener { description, position ->
@@ -181,17 +180,17 @@ class SettingsProfileActivity : AppCompatActivity() {
 
     private fun setDiceDescriptionEnabled(it: Boolean) {
         mDiceDescriptionSwitch.isChecked = it
-        mDiceDescriptionNumberPicker.visibility = if (it) VISIBLE else GONE
+//        mDiceDescriptionNumberPicker.visibility = if (it) VISIBLE else GONE
         mDescriptionRecyclerView.visibility = if (it) VISIBLE else GONE
     }
 
     private fun setDiceDescriptionPickerSize(it: Int) {
         mAdapter.listSize = it
         mAdapter.notifyDataSetChangedInfiniteLoop()
-        mDiceDescriptionNumberPicker.apply {
-            minValue = 1
-            maxValue = it
-        }
+//        mDiceDescriptionNumberPicker.apply {
+//            minValue = 1
+//            maxValue = it
+//        }
     }
 
     fun onDiceSumSwitchClick(view: View) {

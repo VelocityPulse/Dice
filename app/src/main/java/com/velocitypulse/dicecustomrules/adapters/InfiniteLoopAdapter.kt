@@ -1,7 +1,6 @@
 package com.velocitypulse.dicecustomrules.adapters
 
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 abstract class InfiniteLoopAdapter<VH : RecyclerView.ViewHolder>(
@@ -32,14 +31,16 @@ abstract class InfiniteLoopAdapter<VH : RecyclerView.ViewHolder>(
             return
 
         notifyDataSetChanged()
-        val calculatedScroll =
+        val calculatedPosition =
             (Integer.MAX_VALUE / 2) - ((Integer.MAX_VALUE / 2) % getItemCountInfiniteLoop())
 
-        if (recycler.layoutManager is LinearLayoutManager)
-            (recycler.layoutManager as LinearLayoutManager)
-                .scrollToPositionWithOffset(calculatedScroll, 0)
+        CenterScroller(recycler.context).let {
+            it.targetPosition = calculatedPosition
+            recycler.layoutManager?.scrollToPosition(calculatedPosition)
+            recycler.layoutManager?.startSmoothScroll(it)
+        }
     }
 
-    abstract class ViewHolder(view: View): RecyclerView.ViewHolder(view)
+    abstract class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
 }

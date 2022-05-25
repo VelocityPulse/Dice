@@ -9,7 +9,6 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
-
 @Entity(tableName = SettingsProfile.tableName)
 data class SettingsProfile(
     @PrimaryKey(autoGenerate = true) var id: Long = 0,

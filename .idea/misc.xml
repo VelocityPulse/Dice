@@ -10,13 +10,22 @@
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/drawable/ic_settings.xml" value="0.2195" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/action_bar_settings.xml" value="0.19722222222222222" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/action_bar_template.xml" value="0.5714285714285714" />
+        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/activity_settings.xml" value="0.42256410256410254" />
+        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/activity_settings_profile.xml" value="0.42256410256410254" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/dice.xml" value="0.42857142857142855" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/dice_description_item.xml" value="0.42857142857142855" />
+        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/item_dice_description.xml" value="0.42857142857142855" />
+        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/item_number_picker.xml" value="0.387037037037037" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/main_activity.xml" value="0.2857142857142857" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/profile_item.xml" value="0.25462962962962965" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/profile_item_removing.xml" value="0.1" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/settings_activity.xml" value="0.1" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layout/settings_profile_activity.xml" value="0.3828571428571429" />
+        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layouts/items/layout/dice_description_item.xml" value="0.15462962962962962" />
+        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layouts/views/layout/action_bar_template.xml" value="0.521875" />
+        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layouts/views/layout/dice.xml" value="0.15462962962962962" />
+        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layouts/views/layout/settings_activity.xml" value="0.15462962962962962" />
+        <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/layouts/views/layout/settings_profile_activity.xml" value="0.5964285714285714" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/menu/main_menu.xml" value="0.29259259259259257" />
         <entry key="..\:/Users/Clement/Android projets/Dice/app/src/main/res/menu/profile_menu.xml" value="0.29259259259259257" />
       </map>
