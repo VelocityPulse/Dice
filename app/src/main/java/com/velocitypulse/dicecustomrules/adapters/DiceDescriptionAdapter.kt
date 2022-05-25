@@ -22,7 +22,7 @@ open class DiceDescriptionAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DescriptionViewHolder {
         val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.dice_description_item, parent, false)
+            .inflate(R.layout.item_dice_description, parent, false)
 
         return DescriptionViewHolder(itemView)
     }
