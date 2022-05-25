@@ -22,7 +22,7 @@ class SettingsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
         val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.profile_item, parent, false)
+            .inflate(R.layout.item_profile, parent, false)
 
         return ProfileViewHolder(itemView as CardView)
     }

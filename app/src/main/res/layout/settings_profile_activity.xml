@@ -160,7 +160,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/description_dice_value"
             app:layout_constraintTop_toTopOf="@id/description_dice_value"
-            tools:listitem="@layout/dice_description_item" />
+            tools:listitem="@layout/item_dice_description" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
