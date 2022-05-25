@@ -83,7 +83,6 @@ class SettingsAdapter(
                 } else {
                     colorItems = getColor(android.R.color.black)
                     colorBackground = getColor(android.R.color.white)
-//                    cardView.alpha = 0.7f
                 }
             }
             editButton.backgroundTintList = ColorStateList.valueOf(colorItems)

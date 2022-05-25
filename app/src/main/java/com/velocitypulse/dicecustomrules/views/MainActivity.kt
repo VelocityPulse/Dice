@@ -21,7 +21,6 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.util.*
 
-
 class MainActivity : AppCompatActivity() {
 
     private val TAG = "MAIN ACTIVITY"
@@ -37,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     private var mPlayerDiceSong2: MediaPlayer? = null
 
     // TODO Impl
-    private var mDiceBackground: ImageView? = null
+//    private var mDiceBackground: ImageView? = null
     private var mAlphaNumericText: TextView? = null
 
     private var mRollingDiceJob: Job? = null

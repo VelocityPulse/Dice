@@ -41,6 +41,18 @@ class SettingsProfileActivityViewModel(application: Application) : AndroidViewMo
         MutableLiveData<Boolean>()
     }
 
+    val diceDescriptionEnabled: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
+    val diceDescriptionPickerSize: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
+
+    val descriptionMap: MutableLiveData<MutableMap<Int, String>> by lazy {
+        MutableLiveData<MutableMap<Int, String>>()
+    }
+
     suspend fun refreshData(id: Long) {
         LogManager.tests("refresh data")
 
@@ -52,6 +64,10 @@ class SettingsProfileActivityViewModel(application: Application) : AndroidViewMo
         isDiceSumEnabled.postValue(mProfile.isDiceSumEnabled)
         isSongEnabled.postValue(mProfile.isSongEnabled)
         title.postValue(mProfile.title)
+
+        diceDescriptionEnabled.postValue(mProfile.isDiceDescriptionEnabled)
+        descriptionMap.postValue(mProfile.getMapDefinition())
+        diceDescriptionPickerSize.postValue(6 * mProfile.numberOfDice)
     }
 
     fun setTitle(newTitle: String) {
@@ -67,6 +83,7 @@ class SettingsProfileActivityViewModel(application: Application) : AndroidViewMo
             mProfile.numberOfDice = num
             mSettingsProfileRepository.updateProfile(mProfile)
             numberOfDice.postValue(num)
+            diceDescriptionPickerSize.postValue(6 * mProfile.numberOfDice)
         }
     }
 
@@ -86,10 +103,36 @@ class SettingsProfileActivityViewModel(application: Application) : AndroidViewMo
         }
     }
 
+    fun setIsDiceDescriptionEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            mProfile.isDiceDescriptionEnabled = enabled
+            mSettingsProfileRepository.updateProfile(mProfile)
+            diceDescriptionEnabled.postValue(enabled)
+        }
+    }
+
+    fun setMapDescription(map: Map<Int, String>) {
+
+    }
+
     fun deleteProfile() {
         viewModelScope.launch {
             mSettingsProfileRepository.deleteProfile(mProfile)
             finishActivity.postValue(true)
+        }
+    }
+
+    fun onDescriptionEdit(description: String, position: Int) {
+        descriptionMap.value?.let {
+            if (description.isBlank())
+                it.remove(position)
+            else
+                it[position] = description
+
+            viewModelScope.launch {
+                mProfile.setMapDefinition(descriptionMap.value!! as Map<Int, String>)
+                mSettingsProfileRepository.updateProfile(mProfile)
+            }
         }
     }
 }
