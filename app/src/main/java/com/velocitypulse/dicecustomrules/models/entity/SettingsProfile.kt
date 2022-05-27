@@ -31,12 +31,20 @@ data class SettingsProfile(
     @Ignore
     val gson: Gson = GsonBuilder().create()
 
+    @Ignore
+    var tempMap: Map<Int, String>? = null
+
     fun getMapDefinition(): MutableMap<Int, String> {
-        return gson.fromJson<MutableMap<Int, String>?>(serializedMapDefinition, typeOfMapDefinition)
+        tempMap?.let { return tempMap!!.toMutableMap() }
+
+        tempMap = gson.fromJson<MutableMap<Int, String>?>(serializedMapDefinition, typeOfMapDefinition)
             ?: mutableMapOf()
+
+        return tempMap!!.toMutableMap()
     }
 
     fun setMapDefinition(map: Map<Int, String>) {
+        tempMap = map
         serializedMapDefinition = gson.toJson(map)
     }
 

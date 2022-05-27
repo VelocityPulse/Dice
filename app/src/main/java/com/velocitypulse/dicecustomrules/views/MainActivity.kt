@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     // TODO Impl
 //    private var mDiceBackground: ImageView? = null
     private var mAlphaNumericText: TextView? = null
+    private var mDescriptionText: TextView? = null
 
     private var mRollingDiceJob: Job? = null
 
@@ -102,6 +103,7 @@ class MainActivity : AppCompatActivity() {
         mPlayerDiceSong2 = MediaPlayer.create(this, R.raw.dice_song_2)
 
         mAlphaNumericText = findViewById(R.id.alpha_numeric_text_view)
+        mDescriptionText = findViewById(R.id.description_text_view)
     }
 
     fun initObserver() {
@@ -130,6 +132,14 @@ class MainActivity : AppCompatActivity() {
 
         mViewModel.isDiceSumEnabled.observe(this) {
             setSumTextVisibility(it)
+        }
+
+        mViewModel.isDescriptionEnabled.observe(this) {
+            mDescriptionText?.visibility = if (it) View.VISIBLE else View.INVISIBLE
+        }
+
+        mViewModel.description.observe(this) {
+            mDescriptionText?.text = it
         }
     }
 
