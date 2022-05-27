@@ -21,6 +21,8 @@ open class DiceDescriptionAdapter(
 
     private val TAG: String = "DICE DESCRIPTION ADAPTER"
 
+    var onFocusChangeListener: View.OnFocusChangeListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DescriptionViewHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_dice_description, parent, false)
@@ -60,6 +62,7 @@ open class DiceDescriptionAdapter(
         fun bind(description: String, itemPos: Int) {
             descriptionEditText.setText(description)
             descriptionEditText.hint = "Description n°${itemPos + 1}"
+            descriptionEditText.onFocusChangeListener = onFocusChangeListener
             diceNumber.text = (itemPos + 1).toString()
 
             textWatcher = object : TextWatcher {

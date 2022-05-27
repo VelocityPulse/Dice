@@ -32,25 +32,30 @@ abstract class InfiniteLoopAdapter<VH : RecyclerView.ViewHolder>(
         if (getItemCountInfiniteLoop() < 1)
             return
         try {
-            notifyDataSetChanged()
-            val layoutManager = recycler.layoutManager as LinearLayoutManager
-
-            val currentPos = layoutManager.findFirstCompletelyVisibleItemPosition()
-            val step =
-                (Integer.MAX_VALUE / 2) - ((Integer.MAX_VALUE / 2) % getItemCountInfiniteLoop())
-
-            if (currentPos < 2) {
-                if (layoutManager.getChildAt(0) == null)
-                    executeScroll(step, true)
-            } else
-                executeScroll(step, false)
-
+//            notifyDataSetChanged()
+            updateScroll()
         } catch (th: Throwable) {
             LogManager.error(th.stackTraceToString())
         }
     }
 
-    fun executeScroll(position: Int, shouldPostOnRecycler: Boolean) {
+    fun updateScroll() {
+        if (getItemCountInfiniteLoop() < 1)
+            return
+
+        val layoutManager = recycler.layoutManager as LinearLayoutManager
+
+//        val currentPos = layoutManager.findFirstCompletelyVisibleItemPosition()
+        val step =
+            (Integer.MAX_VALUE / 2) - ((Integer.MAX_VALUE / 2) % getItemCountInfiniteLoop())
+
+//        if (currentPos < 2) {
+//            executeScroll(step, false)
+//        } else
+            executeScroll(step, false)
+    }
+
+    private fun executeScroll(position: Int, shouldPostOnRecycler: Boolean) {
         val layoutManager = recycler.layoutManager as LinearLayoutManager
 
         if (shouldPostOnRecycler) {
