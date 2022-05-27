@@ -35,7 +35,6 @@ class SettingsProfileActivity : AppCompatActivity() {
     private lateinit var mTitleEditText: TextInputEditText
     private lateinit var mTitleInputLayout: TextInputLayout
     private lateinit var mDiceDescriptionSwitch: SwitchCompat
-//    private lateinit var mDiceDescriptionNumberPicker: NumberPicker
     private lateinit var mDescriptionRecyclerView: RecyclerView
 
     private lateinit var mAdapter: DiceDescriptionAdapter
@@ -82,7 +81,6 @@ class SettingsProfileActivity : AppCompatActivity() {
         mTitleEditText = findViewById(R.id.title_input)
         mTitleInputLayout = findViewById(R.id.title_filed)
         mDiceDescriptionSwitch = findViewById(R.id.description_enable)
-//        mDiceDescriptionNumberPicker = findViewById(R.id.description_dice_value)
         mDescriptionRecyclerView = findViewById(R.id.description_recycler_view)
     }
 
@@ -121,17 +119,13 @@ class SettingsProfileActivity : AppCompatActivity() {
         ).also {
             mDescriptionRecyclerView.adapter = it
             mAdapter = it
+            it.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
+                if (!hasFocus)
+                    hideKeyboard(v)
+            }
         }
 
-//        mDiceDescriptionNumberPicker.onNestedScroll()
 
-
-//        mDiceDescriptionNumberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
-//            mAdapter.scrollToPosition(oldVal, newVal)
-//        }
-
-        var lastEventY = 0f
-        var isUp = true
     }
 
     val onDescriptionTextEdit = DiceDescriptionAdapter.OnTextEditListener { description, position ->
@@ -152,12 +146,18 @@ class SettingsProfileActivity : AppCompatActivity() {
 
     private fun setDescriptionMap(it: MutableMap<Int, String>) {
         mAdapter.descriptionMap = it
-//        mAdapter.notifyDataSetChangedInfiniteLoop()
     }
 
     private fun setDiceDescriptionEnabled(it: Boolean) {
         mDiceDescriptionSwitch.isChecked = it
         mDescriptionRecyclerView.visibility = if (it) VISIBLE else GONE
+
+        // Necessary post because at activity launch, recycler miss information due to its own
+        // instantiation process
+        mDescriptionRecyclerView.post {
+            mAdapter.updateScroll()
+        }
+//        mAdapter.notifyDataSetChangedInfiniteLoop()
     }
 
     private fun setDiceDescriptionPickerSize(it: Int) {

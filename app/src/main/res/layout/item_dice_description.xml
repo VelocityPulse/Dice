@@ -6,17 +6,17 @@
 
     <EditText
         android:id="@+id/description_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:autofillHints="no"
         android:background="@android:color/transparent"
         android:hint="Description for result n°"
-        android:inputType="text"
+        android:inputType="textCapSentences"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/dice_number"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
@@ -32,6 +32,9 @@
         android:id="@+id/dice_number"
         android:layout_width="80dp"
         android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:gravity="center"
         android:text="1"
         android:textAlignment="center"
@@ -48,8 +51,6 @@
         android:background="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/dice_number"
-        app:layout_constraintRight_toRightOf="parent"
-
-        />
+        app:layout_constraintRight_toRightOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
