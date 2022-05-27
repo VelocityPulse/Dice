@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.velocitypulse.dicecustomrules.R
 
@@ -53,11 +54,13 @@ open class DiceDescriptionAdapter(
     inner class DescriptionViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
         val descriptionEditText: EditText = view.findViewById(R.id.description_edit_text)
+        val diceNumber: TextView = view.findViewById(R.id.dice_number)
         var textWatcher: TextWatcher? = null
 
         fun bind(description: String, itemPos: Int) {
             descriptionEditText.setText(description)
             descriptionEditText.hint = "Description n°${itemPos + 1}"
+            diceNumber.text = (itemPos + 1).toString()
 
             textWatcher = object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, strt: Int, cnt: Int, af: Int) {}
