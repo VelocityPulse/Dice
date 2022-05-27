@@ -1,7 +1,9 @@
 package com.velocitypulse.dicecustomrules.adapters
 
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.velocitypulse.dicecustomrules.core.LogManager
 
 abstract class InfiniteLoopAdapter<VH : RecyclerView.ViewHolder>(
     val recycler: RecyclerView
@@ -29,16 +31,48 @@ abstract class InfiniteLoopAdapter<VH : RecyclerView.ViewHolder>(
     fun notifyDataSetChangedInfiniteLoop() {
         if (getItemCountInfiniteLoop() < 1)
             return
+        try {
+            notifyDataSetChanged()
+            val layoutManager = recycler.layoutManager as LinearLayoutManager
 
-        notifyDataSetChanged()
-        val calculatedPosition =
-            (Integer.MAX_VALUE / 2) - ((Integer.MAX_VALUE / 2) % getItemCountInfiniteLoop())
+            val currentPos = layoutManager.findFirstCompletelyVisibleItemPosition()
+            val step =
+                (Integer.MAX_VALUE / 2) - ((Integer.MAX_VALUE / 2) % getItemCountInfiniteLoop())
 
-        CenterScroller(recycler.context).let {
-            it.targetPosition = calculatedPosition
-            recycler.layoutManager?.scrollToPosition(calculatedPosition)
-            recycler.layoutManager?.startSmoothScroll(it)
+            if (currentPos < 2) {
+                if (layoutManager.getChildAt(0) == null)
+                    executeScroll(step, true)
+            } else
+                executeScroll(step, false)
+
+        } catch (th: Throwable) {
+            LogManager.error(th.stackTraceToString())
         }
+    }
+
+    fun executeScroll(position: Int, shouldPostOnRecycler: Boolean) {
+        val layoutManager = recycler.layoutManager as LinearLayoutManager
+
+        if (shouldPostOnRecycler) {
+            recycler.post {
+                layoutManager.scrollToPositionWithOffset(
+                    position,
+                    calculateDtToFit(layoutManager.getChildAt(0))
+                )
+            }
+        } else {
+            layoutManager.scrollToPositionWithOffset(
+                position,
+                calculateDtToFit(layoutManager.getChildAt(0))
+            )
+        }
+    }
+
+    fun calculateDtToFit(viewHolder: View?): Int {
+        if (viewHolder == null)
+            return 0
+
+        return ((recycler.height - viewHolder.height) / 2) - (recycler.verticalFadingEdgeLength / 2)
     }
 
     abstract class ViewHolder(view: View) : RecyclerView.ViewHolder(view)

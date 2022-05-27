@@ -132,29 +132,6 @@ class SettingsProfileActivity : AppCompatActivity() {
 
         var lastEventY = 0f
         var isUp = true
-//        mDiceDescriptionNumberPicker.setOnTouchListener(fun(v: View, event: MotionEvent): Boolean {
-//            if (event.action == MotionEvent.ACTION_DOWN) {
-//                lastEventY = event.y
-//                isUp = false
-//            }
-//            else if (event.action == MotionEvent.ACTION_MOVE) {
-//                mDescriptionRecyclerView.scrollBy(0, (lastEventY - event.y).toInt())
-//                lastEventY = event.y
-//            }
-//            else if (event.action == MotionEvent.ACTION_UP)
-//                isUp = true
-//                LogManager.debug(TAG, "recycler y : ${mDescriptionRecyclerView.scrollY}")
-//
-//            return false
-//        })
-
-
-//        mDiceDescriptionNumberPicker.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-//            if (isUp)
-//                mDescriptionRecyclerView.scrollBy(oldScrollX - scrollX, oldScrollY - scrollY)
-////            mDescriptionRecyclerView.scrollBy(0, (lastEventY - event.y).toInt())
-////            mDescriptionRecyclerView.scrollBy(0, )
-//        }
     }
 
     val onDescriptionTextEdit = DiceDescriptionAdapter.OnTextEditListener { description, position ->
@@ -175,22 +152,17 @@ class SettingsProfileActivity : AppCompatActivity() {
 
     private fun setDescriptionMap(it: MutableMap<Int, String>) {
         mAdapter.descriptionMap = it
-        mAdapter.notifyDataSetChangedInfiniteLoop()
+//        mAdapter.notifyDataSetChangedInfiniteLoop()
     }
 
     private fun setDiceDescriptionEnabled(it: Boolean) {
         mDiceDescriptionSwitch.isChecked = it
-//        mDiceDescriptionNumberPicker.visibility = if (it) VISIBLE else GONE
         mDescriptionRecyclerView.visibility = if (it) VISIBLE else GONE
     }
 
     private fun setDiceDescriptionPickerSize(it: Int) {
         mAdapter.listSize = it
         mAdapter.notifyDataSetChangedInfiniteLoop()
-//        mDiceDescriptionNumberPicker.apply {
-//            minValue = 1
-//            maxValue = it
-//        }
     }
 
     fun onDiceSumSwitchClick(view: View) {
