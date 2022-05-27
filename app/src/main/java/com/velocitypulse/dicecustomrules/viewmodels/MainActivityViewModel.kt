@@ -52,6 +52,14 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         MutableLiveData<Int>()
     }
 
+    val isDescriptionEnabled: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
+    val description: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
     suspend fun refreshData() {
         LogManager.tests("refresh data")
 
@@ -61,6 +69,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         numberOfDice.postValue(mProfile.numberOfDice)
         diceSum.postValue(mProfile.numberOfDice)
         diceValues.postValue(Array(mProfile.numberOfDice) { 1 }.toList())
+        isDescriptionEnabled.postValue(mProfile.isDiceDescriptionEnabled)
+        description.postValue(mProfile.getMapDefinition()[mProfile.numberOfDice - 1])
 
         for (index in 1..12)
             mDiceListOfSeenFace.add(IntArray(6))
@@ -92,6 +102,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
                 diceValues.postValue(newDices)
                 diceSum.postValue(newDices.sum())
+                description.postValue(mProfile.getMapDefinition()[newDices.sum() - 1])
             } catch (th: Throwable) {
                 th.printStackTrace()
             } finally {
